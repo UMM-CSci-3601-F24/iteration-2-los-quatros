@@ -1,24 +1,42 @@
-import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 // import { MatCardModule } from '@angular/material/card';
 
 import { WordListComponent } from './word-list.component';
+import { WordService } from './word.service';
+import { MockWordService } from 'src/testing/word.service.mock';
+import { Word } from './word';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
-describe('WordListComponent', () => {
-  let component: WordListComponent;
+describe('Word List', () => {
+  let wordList: WordListComponent;
   let fixture: ComponentFixture<WordListComponent>;
 
   beforeEach(async () => {
-    await TestBed.configureTestingModule({
-      imports: [WordListComponent]
+    TestBed.configureTestingModule({
+      imports: [WordListComponent, BrowserAnimationsModule],
+      providers: [{provide: WordService, useValue: new MockWordService}],
     })
-    .compileComponents();
-
-    fixture = TestBed.createComponent(WordListComponent);
-    component = fixture.componentInstance;
-    fixture.detectChanges();
   });
+
+  beforeEach(waitForAsync(() => {
+    TestBed.compileComponents().then(() => {
+      fixture = TestBed.createComponent(WordListComponent);
+      wordList = fixture.componentInstance;
+      fixture.detectChanges();
+    });
+  }));
 
   it('should create', () => {
-    expect(component).toBeTruthy();
+    expect(wordList).toBeTruthy();
   });
+  it('contains all the words', () => {
+    expect(wordList.serverFilteredWords().length).toBe(5);
+  })
+  it("contains a word 'Mac'", () => {
+    expect(
+      wordList.serverFilteredWords().some((word: Word) => word.word === 'Mac')
+    ).toBe(true);
+  });
+  // it has 4 words in group group members
+  //it has one word in group 'teachers'
 });

@@ -1,6 +1,6 @@
 export interface Word {
   word: string;
-  numLetters: number;
+  //numLetters: number;
   wordGroup: string;
 
   // future implementations
