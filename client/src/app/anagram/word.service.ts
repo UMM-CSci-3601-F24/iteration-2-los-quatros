@@ -43,4 +43,8 @@ export class WordService {
     }
     return filteredWords;
   }
+
+  // addWordsList(newWordsList: Partial<Word>): Observable<string> {
+  //   return this.httpClient.post<{id: string}>(this.wordUrl, newWord).pipe(map(res => res.id));
+  // }
 }
