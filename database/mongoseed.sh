@@ -2,7 +2,8 @@
 
 seed_db="${MONGO_DB:-dev}"
 echo Dropping DB "$seed_db"
-mongo "$seed_db" --eval "db.dropDatabase()"
+mongosh "$seed_db" --eval "db.dropDatabase()"
+# possible fix for seeding issue, if no work change to mongo instead of mongosh
 for file in "$(dirname "$BASH_SOURCE")"/seed/*.json; do
   if [[ -f "$file" ]]; then
     echo Seeding "$(basename "$file" ".json")" from "$file" in DB "$seed_db"
