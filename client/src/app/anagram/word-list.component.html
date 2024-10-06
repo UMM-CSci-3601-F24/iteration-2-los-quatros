@@ -6,6 +6,12 @@
       </mat-card-header>
       <mat-card-content>
         <mat-form-field class="input-field">
+          <mat-label>Contains</mat-label>
+          <input matInput data-test="wordContainsInput" placeholder="Filter by contents" [(ngModel)]="contains">
+        </mat-form-field>
+        
+        <br>
+        <mat-form-field class="input-field">
           <mat-label>Length</mat-label>
           <input matInput data-test="wordLengthInput" type="number" placeholder="Filter by length"
             min="1" max="100" [(ngModel)]="wordLength">
@@ -43,12 +49,34 @@
             <mat-radio-button>Decreasing</mat-radio-button>
           </mat-radio-group>
         </div>
-
       </mat-card-content>
     </mat-card>
   </div>
 </div>
 
 <div class="flex-row">
-  <p>put words here</p>
+  @if(serverFilteredWords()) {
+    <div class="flex-1">
+      <mat-card>
+        <mat-card-content>
+          <mat-nav-list class="anagram-nav-list">
+            @for (word of filteredWords(); track word.word) {
+              <!-- this is kind of an awful track command-->
+              <span matListItemTitle mat-line class="anagram-list-word">{{word.word}}</span>
+            }
+          </mat-nav-list>
+        </mat-card-content>
+      </mat-card>
+    </div>
+  } @else {
+    <div class="flex-1" class="anagram-error">
+      <mat-error>
+        There was a problem loading the words.
+        Possibly the server is down or perhaps there are network issues.
+      </mat-error>
+      <mat-error>
+        Please wait a bit and try again or start the server.
+      </mat-error>
+    </div>
+  }
 </div>
