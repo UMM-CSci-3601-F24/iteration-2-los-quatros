@@ -10,6 +10,7 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 import { toObservable, toSignal } from '@angular/core/rxjs-interop';
 import { catchError, combineLatest, of, switchMap, tap } from 'rxjs';
 import { Word } from './word';
+import { MatInputModule } from '@angular/material/input';
 
 @Component({
   selector: 'app-word-list-component',
@@ -21,6 +22,7 @@ import { Word } from './word';
     MatSelectModule,
     MatFormFieldModule,
     FormsModule,
+    MatInputModule,
   ],
   templateUrl: './word-list.component.html',
   styleUrl: './word-list.component.scss'
@@ -32,6 +34,9 @@ export class WordListComponent {
   //server side filtering
   contains = signal<string|undefined>(undefined);
   group = signal<string|undefined>(undefined);
+  wordLength = signal<number | undefined>(undefined);
+  letterPlacement = signal<string | undefined>(undefined);
+  // I would love for this to be a char array
 
   errMsg = signal<string | undefined>(undefined);
 
