@@ -10,7 +10,7 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 import { toObservable, toSignal } from '@angular/core/rxjs-interop';
 import { catchError, combineLatest, of, switchMap, tap } from 'rxjs';
 import { Word } from './word';
-
+import { MatListModule } from '@angular/material/list';
 @Component({
   selector: 'app-word-list-component',
   standalone: true,
@@ -21,6 +21,7 @@ import { Word } from './word';
     MatSelectModule,
     MatFormFieldModule,
     FormsModule,
+    MatListModule,
   ],
   templateUrl: './word-list.component.html',
   styleUrl: './word-list.component.scss'
