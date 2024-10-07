@@ -16,7 +16,7 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.stream.Collectors;
+// import java.util.stream.Collectors;
 
 import org.bson.Document;
 import org.bson.types.ObjectId;
@@ -45,6 +45,7 @@ import io.javalin.http.NotFoundResponse;
 import io.javalin.json.JavalinJackson;
 import io.javalin.validation.BodyValidator;
 import io.javalin.validation.Validation;
+import io.javalin.validation.ValidationException;
 import io.javalin.validation.Validator;
 
 
@@ -154,7 +155,7 @@ class WordControllerSpec {
     //     when(ctx.queryParam(WordController.WORD_GROUP_KEY)).thenReturn(targetWordGroup);
 
     //     Validation validation = new Validation();
-    //     Validator<String> validator = validation.validator(WordController.WORD_GROUP_KEY, String.class, targetWordGroup);
+    // Validator<String> validator = validation.validator(WordController.WORD_GROUP_KEY, String.class, targetWordGroup);
 
     //     when(ctx.queryParamAsClass(WordController.WORD_GROUP_KEY, String.class)).thenReturn(validator);
 
@@ -268,28 +269,133 @@ class WordControllerSpec {
     assertEquals("The requested word was not found", exception.getMessage());
   }
 
+  @Test
+  void addWord() throws IOException {
+    Word newWord = new Word();
+    newWord.word = "computer";
+    newWord.wordGroup = "technology";
+
+    String newWordJson = javalinJackson.toJsonString(newWord, Word.class);
+
+    when(ctx.bodyValidator(Word.class))
+      .thenReturn(new BodyValidator<Word>(newWordJson, Word.class,
+                    () -> javalinJackson.fromJsonString(newWordJson, Word.class)));
+
+    wordController.addNewWord(ctx);
+    verify(ctx).json(mapCaptor.capture());
+
+    verify(ctx).status(HttpStatus.CREATED);
+    Document addedWord = db.getCollection("words")
+        .find(eq("_id", new ObjectId(mapCaptor.getValue().get("id")))).first();
+
+    assertNotEquals("", addedWord.get("_id"));
+    assertEquals(newWord.word, addedWord.get(WordController.WORD_KEY)); //("word"));
+    assertEquals(newWord.wordGroup, addedWord.get("wordGroup")); //(WordController.WORD_GROUP_KEY));
+  }
+
+  @Test
+  void addBadWordWord() throws IOException {
+    String newWordJson = """
+        {
+        "word": "",
+        "wordGroup": "food"
+        }
+        """;
+    when(ctx.body()).thenReturn(newWordJson);
+    when(ctx.bodyValidator(Word.class))
+      .then(value -> new BodyValidator<Word>(newWordJson, Word.class,
+        () -> javalinJackson.fromJsonString(newWordJson, Word.class)));
+
+    ValidationException exception = assertThrows(ValidationException.class, () -> {
+      wordController.addNewWord(ctx);
+    });
+
+    String exceptionMessage = exception.getErrors().get("REQUEST_BODY").get(0).toString();
+
+    assertTrue(exceptionMessage.contains("New words must be non-empty"));
+  }
+
+  @Test
+  void addBadWordWordGroup() throws IOException {
+    String newWordJson = """
+        {
+        "word": "burger",
+        "wordGroup": ""
+        }
+        """;
+
+        when(ctx.body()).thenReturn(newWordJson);
+        when(ctx.bodyValidator(Word.class))
+          .then(value -> new BodyValidator<Word>(newWordJson, Word.class,
+            () -> javalinJackson.fromJsonString(newWordJson, Word.class)));
+
+        ValidationException exception = assertThrows(ValidationException.class, () -> {
+          wordController.addNewWord(ctx);
+        });
+
+        String exceptionMessage = exception.getErrors().get("REQUEST_BODY").get(0).toString();
+
+        assertTrue(exceptionMessage.contains("Word Group must be non-empty"));
+  }
+
   // @Test
-  // void addWord() throws IOException {
-  //   Word newWord = new Word();
-  //   newWord.word = "computer";
-  //   newWord.wordGroup = "technology";
+  // void addBadWordWordGroupNull() throws IOException {
+  //   String newWordJson = """
+  //       {
+  //       "word": "burger",
+  //       "wordGroup": null,
+  //       }
+  //       """;
 
-  //   String newWordJson = javalinJackson.toJsonString(newWord, Word.class);
-  //   when(ctx.bodyValidator(Word.class))
-  //     .thenReturn(new BodyValidator<Word>(newWordJson, Word.class,
-  //                   () -> javalinJackson.fromJsonString(newWordJson, Word.class)));
+  //       when(ctx.body()).thenReturn(newWordJson);
+  //       when(ctx.bodyValidator(Word.class))
+  //         .then(value -> new BodyValidator<Word>(newWordJson, Word.class,
+  //           () -> javalinJackson.fromJsonString(newWordJson, Word.class)));
 
-  //   wordController.addNewWord(ctx);
-  //   verify(ctx).json(mapCaptor.capture());
+  //       ValidationException exception = assertThrows(ValidationException.class, () -> {
+  //         wordController.addNewWord(ctx);
+  //       });
 
-  //   verify(ctx).status(HttpStatus.CREATED);
-  //   Document addedWord = db.getCollection("words")
-  //       .find(eq("_id", new ObjectId(mapCaptor.getValue().get("id")))).first();
+  //       String exceptionMessage = exception.getErrors().get("REQUEST_BODY").get(0).toString();
 
-  //   assertNotEquals("", addedWord.get("_id"));
-  //   assertEquals(newWord.word, addedWord.get("word"));
-  //   assertEquals(newWord.wordGroup, addedWord.get(WordController.WORD_GROUP_KEY));
+  //       assertTrue(exceptionMessage.contains("Word Group must be non-empty"));
   // }
+
+  @Test
+  void deleteFoundWord() throws IOException {
+    String testID = wordId.toHexString();
+    when(ctx.pathParam("id")).thenReturn(testID);
+
+    assertEquals(1, db.getCollection("words")
+      .countDocuments(eq("_id", new ObjectId(testID))));
+
+    wordController.deleteWord(ctx);
+
+    verify(ctx).status(HttpStatus.OK);
+
+    assertEquals(0, db.getCollection("words")
+      .countDocuments(eq("_id", new ObjectId(testID))));
+  }
+
+  @Test
+  void deleteNotFoundWord() throws IOException {
+    String testID = wordId.toHexString();
+    when(ctx.pathParam("id")).thenReturn(testID);
+
+    wordController.deleteWord(ctx);
+
+    assertEquals(0, db.getCollection("words")
+      .countDocuments(eq("_id", new ObjectId(testID))));
+
+    assertThrows(NotFoundResponse.class, () -> {
+      wordController.deleteWord(ctx);
+    });
+
+    verify(ctx).status(HttpStatus.NOT_FOUND);
+
+    assertEquals(0, db.getCollection("words")
+      .countDocuments(eq("_id", new ObjectId(testID))));
+  }
 
 }
 

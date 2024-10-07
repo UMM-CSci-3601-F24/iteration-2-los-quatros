@@ -37,11 +37,23 @@ public class WordSpec {
   }
 
   @Test
+  void compareWordWithNonWord() {
+    assertFalse(word1.equals(word1._id));
+  }
+
+  @Test
   void hashCodesAreBasedOnId() {
     word1._id = FAKE_ID_STRING_1;
     word2._id = FAKE_ID_STRING_1;
 
     assertTrue(word1.hashCode() == word2.hashCode());
+  }
+
+  @Test
+  void toStringReturnsString() {
+    word1.word = "blah";
+
+    assertTrue(word1.toString() == word1.word);
   }
 
 }

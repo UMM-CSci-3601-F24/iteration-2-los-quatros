@@ -34,8 +34,8 @@ public class WordController implements Controller {
     private static final String API_WORDS = "/api/words";
     private static final String API_WORD_BY_ID = "/api/words/{id}";
     static final String WORD_KEY = "word";
-    static final String WORD_GROUP_KEY = "wordgroup";
-    static final String SORT_ORDER_KEY = "sortorder";
+    static final String WORD_GROUP_KEY = "wordGroup";
+    static final String SORT_ORDER_KEY = "sortOrder";
 
     private final JacksonMongoCollection<Word> wordCollection;
 
@@ -98,7 +98,7 @@ public class WordController implements Controller {
 
 private Bson constructSortingOrder(Context ctx) {
     String sortBy = Objects.requireNonNullElse(ctx.queryParam("sortby"), "word");
-    String sortOrder = Objects.requireNonNullElse(ctx.queryParam("sortorder"), "asc");
+    String sortOrder = Objects.requireNonNullElse(ctx.queryParam("sortOrder"), "asc");
     Bson sortingOrder = sortOrder.equals("desc") ?  Sorts.descending(sortBy) : Sorts.ascending(sortBy);
     return sortingOrder;
 }
@@ -109,9 +109,9 @@ public void addNewWord(Context ctx) {
     String body = ctx.body();
     Word newWord = ctx.bodyValidator(Word.class)
     .check(td -> td.word != null && td.word.length() > 0,
-        "Todo must have a non-empty owner; body was " + body)
+        "New words must be non-empty; New words was " + body)
     .check(td -> td.wordGroup != null && td.wordGroup.length() > 0,
-        "Todo must have a non-empty category; body was " + body)
+        "Word Group must be non-empty; Group was " + body)
     // .check(td -> td.body != null && td.body.length() > 0,
     //     "Todo must have a non-empty body; body was " + body)
     .get();
