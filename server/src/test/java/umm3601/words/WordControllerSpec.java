@@ -167,7 +167,6 @@ class WordControllerSpec {
   @Test
   void canGetAllWords() throws IOException {
     when(ctx.queryParamMap()).thenReturn(Collections.emptyMap());
-
     wordsController.getWords(ctx);
 
     verify(ctx).json(wordsArrayListCaptor.capture());

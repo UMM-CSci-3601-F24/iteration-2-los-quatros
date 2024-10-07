@@ -31,8 +31,8 @@ public class WordController implements Controller {
 
   private static final String API_WORD = "/api/word";
   private static final String API_WORD_BY_ID = "/api/word/{id}";
-  // private static final String WORD_KEY = "word";
-  // private static final String WORDGROUP_KEY = "wordgroup";
+  private static final String WORD_KEY = "word";
+  private static final String WORDGROUP_KEY = "wordgroup";
 
   private final JacksonMongoCollection<Word> wordCollection;
 
@@ -67,30 +67,26 @@ public class WordController implements Controller {
     Bson sortingOrder = constructSortingOrder(ctx);
 
     ArrayList<Word> matchingWords = wordCollection
-        .find(combinedFilter)   // Use the combined filter here
-        .sort(sortingOrder)     // Sort according to query parameters
+        .find(combinedFilter)
+        .sort(sortingOrder)
         .into(new ArrayList<>());
 
     ctx.json(matchingWords);
     ctx.status(HttpStatus.OK);
 }
 
-  private static final String WORD_KEY = "word";
-private static final String WORD_GROUP_KEY = "wordGroup";
 
 private Bson constructFilter(Context ctx) {
     List<Bson> filters = new ArrayList<>();
 
-    // Filter by 'word' (case-insensitive regex match)
     if (ctx.queryParamMap().containsKey(WORD_KEY)) {
         Pattern wordPattern = Pattern.compile(Pattern.quote(ctx.queryParam(WORD_KEY)), Pattern.CASE_INSENSITIVE);
         filters.add(regex(WORD_KEY, wordPattern));
     }
 
-    // Filter by 'wordGroup' (case-insensitive regex match)
-    if (ctx.queryParamMap().containsKey(WORD_GROUP_KEY)) {
+    if (ctx.queryParamMap().containsKey(WORDGROUP_KEY)) {
         Pattern wordGroupPattern = Pattern.compile(Pattern.quote(ctx.queryParam(WORD_GROUP_KEY)), Pattern.CASE_INSENSITIVE);
-        filters.add(regex(WORD_GROUP_KEY, wordGroupPattern));
+        filters.add(regex(WORDGROUP_KEY, wordGroupPattern));
     }
 
     Bson combinedFilter = filters.isEmpty() ? new Document() : and(filters);
@@ -124,8 +120,7 @@ private Bson constructFilter(Context ctx) {
   public void deleteWord(Context ctx) {
     String id = ctx.pathParam("id");
     DeleteResult deleteResult = wordCollection.deleteOne(eq("_id", new ObjectId(id)));
-    // We should have deleted 1 or 0 users, depending on whether `id` is a valid
-    // user ID.
+
     if (deleteResult.getDeletedCount() != 1) {
       ctx.status(HttpStatus.NOT_FOUND);
       throw new NotFoundResponse(
@@ -141,7 +136,7 @@ private Bson constructFilter(Context ctx) {
     server.get(API_WORD_BY_ID, this::getWord);
 
     // List words, filtered using query parameters
-    server.get(API_WORD, this::getWords);
+    // server.get(API_WORD, this::getWords);
 
     // Delete the specified word
     server.delete(API_WORD_BY_ID, this::deleteWord);
