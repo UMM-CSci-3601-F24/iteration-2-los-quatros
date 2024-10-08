@@ -40,6 +40,7 @@ From the `server` directory:
 - `./gradlew checkstyleMain` to run Checkstyle on the server Java code in the `src/main` folder
 - `./gradlew checkstyleTest` to run Checkstyle on the server Java code in the `src/test` folder
 - `./gradlew check` will run the tests, run the Checkstyle checks, and generate coverage reports in one command
+  - find coverage report for server at server/build/jacocoHtml/index.html
 
 From the `client` directory:
 
@@ -47,6 +48,7 @@ From the `client` directory:
 - `ng test` to test the client
   - Or `ng test --no-watch --code-coverage` to run the client tests once and
     also compute the code coverage.
+  - coverage report is at client/coverage/client/index.html
 - `ng e2e` and `ng e2e --watch` to run end-to-end tests
 
 From the `database` directory:

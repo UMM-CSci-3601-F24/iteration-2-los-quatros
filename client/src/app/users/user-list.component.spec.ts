@@ -116,6 +116,7 @@ describe('User list', () => {
 describe('Misbehaving User List', () => {
   let userList: UserListComponent;
   let fixture: ComponentFixture<UserListComponent>;
+  let originalTimeout;
 
   let userServiceStub: {
     getUsers: () => Observable<User[]>;
@@ -147,6 +148,16 @@ describe('Misbehaving User List', () => {
       fixture.detectChanges();
     });
   }));
+
+  // these two functions are a workaround to build more time
+  //into this test so it does not auto fail when another test fails
+  beforeEach(function() {
+    originalTimeout = jasmine.DEFAULT_TIMEOUT_INTERVAL;
+    jasmine.DEFAULT_TIMEOUT_INTERVAL = 10000;
+  });
+  afterEach(function() {
+    jasmine.DEFAULT_TIMEOUT_INTERVAL = originalTimeout;
+  });
 
   it("generates an error if we don't set up a UserListService", () => {
     // If the service fails, we expect the `serverFilteredUsers` signal to
