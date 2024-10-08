@@ -26,6 +26,7 @@ import io.javalin.http.BadRequestResponse;
 import io.javalin.http.Context;
 import io.javalin.http.HttpStatus;
 import io.javalin.http.NotFoundResponse;
+import kotlin.collections.builders.ListBuilder;
 import umm3601.Controller;
 
 @SuppressWarnings("unchecked")
@@ -136,7 +137,6 @@ public void deleteWord(Context ctx) {
         ctx.status(HttpStatus.OK);
     }
 
-
     public void addListWords(Context ctx) {
         List<Word> newWords = ctx.bodyValidator(List.class)
             .check(list -> list != null && !list.isEmpty(), "Word list cannot be empty")
@@ -156,6 +156,9 @@ public void deleteWord(Context ctx) {
                 return true;
             }, "Each word in the list must have a non-empty 'word' and 'wordGroup' field")
             .get();
+        if (newWords.size() == 1) {
+              addNewWord(ctx);
+            } else {
         List<Word> wordList = new ArrayList<>();
         for (Object obj : newWords) {
             Map<String, String> wordMap = (Map<String, String>) obj;
@@ -172,6 +175,21 @@ public void deleteWord(Context ctx) {
         ctx.json(Map.of("insertedIds", insertedIds));
         ctx.status(HttpStatus.CREATED);
     }
+  }
+
+    // public void static deleteListWords(Context ctx) {
+    //     String deleteWordGroup = ctx.pathParam("wordGroup");
+    //     DeleteResult deleteResult = wordCollection.deleteMany(eq("wordGroup", null));
+
+    //     if(deleteResult.getDeletedCount() != wordCollection.countDocuments("wordGroup", deleteWordGroup)) {
+    //     ctx.status(HttpStatus.NOT_FOUND);
+    //     throw new NotFoundResponse(
+    //       "Was unable to delete word group "
+    //         + deleteWordGroup
+    //         + "; perhaps illegal word group or an word group for item not in the system?");
+    //     }
+    //     ctx.status(HttpStatus.OK);
+    // }
 
 
 
@@ -186,6 +204,7 @@ public void deleteWord(Context ctx) {
 
         server.post(API_WORDS, this::addListWords);
 
+        // server.delete(API_WORDS_BY_WORDGROUP, this::deleteListWords);
       }
     }
 
