@@ -6,11 +6,19 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { WordService } from './word.service';
 import { MatSnackBar } from '@angular/material/snack-bar';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-add-word',
   standalone: true,
-  imports: [FormsModule, ReactiveFormsModule, MatButtonModule, MatCardModule, MatFormFieldModule, MatInputModule],
+  imports: [
+    FormsModule,
+    ReactiveFormsModule,
+    MatButtonModule,
+    MatCardModule,
+    MatFormFieldModule,
+    MatInputModule,
+  ],
   templateUrl: './add-word.component.html',
   styleUrl: './add-word.component.scss'
 })
@@ -40,7 +48,7 @@ export class AddWordComponent {
   constructor(
     private wordService: WordService,
     private snackBar: MatSnackBar,
-    /* private router: Router*/) {
+    private router: Router) {
   }
 
   formControlHasError(controlName: string): boolean {
@@ -57,13 +65,31 @@ export class AddWordComponent {
     return 'Unknown error';
   }
 
-submitForm() {
-throw new Error('Method not implemented.');
-/*
-// gb2
-  this.wordService.addWord(this.addWordForm.value).subscribe({
-  })
-*/
-}
-
+  submitForm() {
+    this.wordService.addWord(this.addWordForm.value).subscribe({
+      next: () => {
+        this.snackBar.open(
+          `Added word group: ${this.addWordForm.value.wordGroup}`,
+          null,
+          {duration: 2000}
+        );
+        this.router.navigate(['/anagram']);
+      },
+      error: err => {
+        if (err.status === 400) {
+          this.snackBar.open(
+            `The server failed to process your request to add a new word group. Is the server up? – Error Code: ${err.status}\nMessage: ${err.message}`,
+              'OK',
+              { duration: 5000 }
+          );
+        } else {
+          this.snackBar.open(
+            `An unexpected error occurred – Error Code: ${err.status}\nMessage: ${err.message}`,
+              'OK',
+              { duration: 5000 }
+          );
+        }
+      },
+    });
+  }
 }
