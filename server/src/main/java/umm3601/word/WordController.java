@@ -138,7 +138,6 @@ public void deleteWord(Context ctx) {
 
 
     public void addListWords(Context ctx) {
-        // Validate and get the list of Word objects from the request body
         List<Word> newWords = ctx.bodyValidator(List.class)
             .check(list -> list != null && !list.isEmpty(), "Word list cannot be empty")
             .check(list -> {
@@ -151,8 +150,6 @@ public void deleteWord(Context ctx) {
                 return true;
             }, "Each word in the list must have a non-empty 'word' and 'wordGroup' field")
             .get();
-
-        // Convert the raw list of maps into a list of Word objects
         List<Word> wordList = new ArrayList<>();
         for (Object obj : newWords) {
             Map<String, String> wordMap = (Map<String, String>) obj;
@@ -161,17 +158,11 @@ public void deleteWord(Context ctx) {
             word.wordGroup = wordMap.get("wordGroup");
             wordList.add(word);
         }
-
-        // Insert the list of Word objects directly into the MongoDB collection
         InsertManyResult insertManyResult = wordCollection.insertMany(wordList);
-
-        // Collect the inserted IDs
         List<String> insertedIds = new ArrayList<>();
         insertManyResult.getInsertedIds().forEach((key, value) ->
             insertedIds.add(value.asObjectId().getValue().toString())
         );
-
-        // Return the inserted IDs in the response
         ctx.json(Map.of("insertedIds", insertedIds));
         ctx.status(HttpStatus.CREATED);
     }
@@ -187,7 +178,7 @@ public void deleteWord(Context ctx) {
 
         server.post(API_WORDS, this::addNewWord);
 
-
+        server.post(API_WORDS, this::addListWords);
 
       }
     }

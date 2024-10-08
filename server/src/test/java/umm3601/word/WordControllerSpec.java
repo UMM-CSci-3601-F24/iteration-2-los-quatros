@@ -423,51 +423,30 @@ class WordControllerSpec {
 
 
   @Test
-void addListWords() throws IOException {
-    // Create a list of new words
+  void addListWords() throws IOException {
     List<Map<String, String>> newWords = new ArrayList<>();
-
     Map<String, String> word1 = new HashMap<>();
     word1.put("word", "laptop");
     word1.put("wordGroup", "technology");
-
     Map<String, String> word2 = new HashMap<>();
     word2.put("word", "coffee");
     word2.put("wordGroup", "beverage");
-
     Map<String, String> word3 = new HashMap<>();
     word3.put("word", "book");
     word3.put("wordGroup", "literature");
-
     newWords.add(word1);
     newWords.add(word2);
     newWords.add(word3);
-
-    // Convert the list to JSON
     String newWordsJson = javalinJackson.toJsonString(newWords, List.class);
-
-    // Mock the context to return the JSON when body is called
     when(ctx.body()).thenReturn(newWordsJson);
-
-    // Mock the body validator to return a validated list of words
     when(ctx.bodyValidator(any(Class.class)))
         .thenReturn(new BodyValidator<>(newWordsJson, List.class, () -> newWords));
-
-    // Call the method under test
     wordController.addListWords(ctx);
-
-    // Verify that the response status is created
     verify(ctx).status(HttpStatus.CREATED);
-
-    // Capture the response JSON
     ArgumentCaptor<Map<String, Object>> mapCaptor = ArgumentCaptor.forClass(Map.class);
     verify(ctx).json(mapCaptor.capture());
-
-    // Check that the inserted IDs match the IDs returned by the insertMany operation
     Map<String, Object> responseMap = mapCaptor.getValue();
     List<String> insertedIds = (List<String>) responseMap.get("insertedIds");
-
-    // Verify that the words are actually added to the MongoDB
     for (String id : insertedIds) {
         Document addedWord = db.getCollection("words").find(eq("_id", new ObjectId(id))).first();
         assertNotNull(addedWord);
@@ -477,8 +456,6 @@ void addListWords() throws IOException {
         ));
     }
 }
-
-
 }
 
 
