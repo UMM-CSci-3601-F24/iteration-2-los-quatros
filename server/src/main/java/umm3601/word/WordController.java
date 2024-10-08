@@ -141,8 +141,8 @@ public void deleteWord(Context ctx) {
         List<Word> newWords = ctx.bodyValidator(List.class)
             .check(list -> list != null && !list.isEmpty(), "Word list cannot be empty")
             .check(list -> {
-                for (Object obj : list) {
-                    if (!(obj instanceof Map)) return false;
+                for (Object obj : list)
+                    if { (!(obj instanceof Map)) return false;
                     Map<String, String> wordMap = (Map<String, String>) obj;
                     if (!wordMap.containsKey("word") || wordMap.get("word").isBlank()) return false;
                     if(!wordMap.containsKey("wordGroup") || wordMap.get("wordGroup").isBlank()) return false;

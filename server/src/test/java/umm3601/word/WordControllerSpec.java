@@ -7,7 +7,6 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
@@ -31,8 +30,6 @@ import org.mockito.Captor;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
-import org.mongojack.JacksonMongoCollection;
-
 import com.mongodb.MongoClientSettings;
 import com.mongodb.ServerAddress;
 import com.mongodb.client.MongoClient;
@@ -422,6 +419,7 @@ class WordControllerSpec {
   }
 
 
+
   @Test
   void addListWords() throws IOException {
     List<Map<String, String>> newWords = new ArrayList<>();
@@ -443,15 +441,16 @@ class WordControllerSpec {
         .thenReturn(new BodyValidator<>(newWordsJson, List.class, () -> newWords));
     wordController.addListWords(ctx);
     verify(ctx).status(HttpStatus.CREATED);
-    ArgumentCaptor<Map<String, Object>> mapCaptor = ArgumentCaptor.forClass(Map.class);
-    verify(ctx).json(mapCaptor.capture());
-    Map<String, Object> responseMap = mapCaptor.getValue();
+    ArgumentCaptor<Map<String, Object>> mapsCaptor = ArgumentCaptor.forClass(Map.class);
+    verify(ctx).json(mapsCaptor.capture());
+    Map<String, Object> responseMap = mapsCaptor.getValue();
     List<String> insertedIds = (List<String>) responseMap.get("insertedIds");
     for (String id : insertedIds) {
         Document addedWord = db.getCollection("words").find(eq("_id", new ObjectId(id))).first();
         assertNotNull(addedWord);
         assertTrue(newWords.stream().anyMatch(word ->
-            word.get("word").equals(addedWord.get("word")) &&
+            word.get("word").equals(addedWord.get("word"))
+            &&
             word.get("wordGroup").equals(addedWord.get("wordGroup"))
         ));
     }
