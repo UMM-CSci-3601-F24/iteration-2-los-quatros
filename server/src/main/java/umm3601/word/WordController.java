@@ -19,6 +19,7 @@ import org.mongojack.JacksonMongoCollection;
 import com.mongodb.client.MongoDatabase;
 import com.mongodb.client.model.Sorts;
 import com.mongodb.client.result.DeleteResult;
+import com.mongodb.client.result.InsertManyResult;
 
 import io.javalin.Javalin;
 import io.javalin.http.BadRequestResponse;
@@ -27,7 +28,7 @@ import io.javalin.http.HttpStatus;
 import io.javalin.http.NotFoundResponse;
 import umm3601.Controller;
 
-
+@SuppressWarnings("unchecked")
 
 public class WordController implements Controller {
 
@@ -136,8 +137,48 @@ public void deleteWord(Context ctx) {
     }
 
 
+    public void addListWords(Context ctx) {
+        // Validate and get the list of Word objects from the request body
+        List<Word> newWords = ctx.bodyValidator(List.class)
+            .check(list -> list != null && !list.isEmpty(), "Word list cannot be empty")
+            .check(list -> {
+                for (Object obj : list) {
+                    if (!(obj instanceof Map)) return false;
+                    Map<String, String> wordMap = (Map<String, String>) obj;
+                    if (!wordMap.containsKey("word") || wordMap.get("word").isBlank()) return false;
+                    if(!wordMap.containsKey("wordGroup") || wordMap.get("wordGroup").isBlank()) return false;
+                }
+                return true;
+            }, "Each word in the list must have a non-empty 'word' and 'wordGroup' field")
+            .get();
 
-    public void addRoutes(Javalin server) {
+        // Convert the raw list of maps into a list of Word objects
+        List<Word> wordList = new ArrayList<>();
+        for (Object obj : newWords) {
+            Map<String, String> wordMap = (Map<String, String>) obj;
+            Word word = new Word();
+            word.word = wordMap.get("word");
+            word.wordGroup = wordMap.get("wordGroup");
+            wordList.add(word);
+        }
+
+        // Insert the list of Word objects directly into the MongoDB collection
+        InsertManyResult insertManyResult = wordCollection.insertMany(wordList);
+
+        // Collect the inserted IDs
+        List<String> insertedIds = new ArrayList<>();
+        insertManyResult.getInsertedIds().forEach((key, value) ->
+            insertedIds.add(value.asObjectId().getValue().toString())
+        );
+
+        // Return the inserted IDs in the response
+        ctx.json(Map.of("insertedIds", insertedIds));
+        ctx.status(HttpStatus.CREATED);
+    }
+
+
+
+  public void addRoutes(Javalin server) {
         server.get(API_WORD_BY_ID, this::getWord);
 
         server.get(API_WORDS, this::getWords);
@@ -145,9 +186,12 @@ public void deleteWord(Context ctx) {
         server.delete(API_WORD_BY_ID, this::deleteWord);
 
         server.post(API_WORDS, this::addNewWord);
-      }
 
-}
+
+
+      }
+    }
+
 
 
 

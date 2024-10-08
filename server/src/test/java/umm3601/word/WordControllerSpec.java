@@ -3,9 +3,11 @@ package umm3601.word;
 import static com.mongodb.client.model.Filters.eq;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
@@ -29,6 +31,7 @@ import org.mockito.Captor;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
+import org.mongojack.JacksonMongoCollection;
 
 import com.mongodb.MongoClientSettings;
 import com.mongodb.ServerAddress;
@@ -56,6 +59,8 @@ class WordControllerSpec {
     private static MongoClient mongoClient;
     private static MongoDatabase db;
     private static JavalinJackson javalinJackson = new JavalinJackson();
+
+    @SuppressWarnings("unchecked")
 
     @Mock
     private Context ctx;
@@ -361,6 +366,25 @@ class WordControllerSpec {
   //       assertTrue(exceptionMessage.contains("Word Group must be non-empty"));
   // }
 
+
+  //   String newWordJson = javalinJackson.toJsonString(newWord, Word.class);
+  //   when(ctx.bodyValidator(Word.class))
+  //     .thenReturn(new BodyValidator<Word>(newWordJson, Word.class,
+  //                   () -> javalinJackson.fromJsonString(newWordJson, Word.class)));
+
+  //   wordController.addNewWord(ctx);
+  //   verify(ctx).json(mapCaptor.capture());
+
+  //   verify(ctx).status(HttpStatus.CREATED);
+  //   Document addedWord = db.getCollection("words")
+  //       .find(eq("_id", new ObjectId(mapCaptor.getValue().get("id")))).first();
+
+  //   assertNotEquals("", addedWord.get("_id"));
+  //   assertEquals(newWord.word, addedWord.get("word"));
+  //   assertEquals(newWord.wordGroup, addedWord.get(WordController.WORD_GROUP_KEY));
+  // }
+
+
   @Test
   void deleteFoundWord() throws IOException {
     String testID = wordId.toHexString();
@@ -397,7 +421,69 @@ class WordControllerSpec {
       .countDocuments(eq("_id", new ObjectId(testID))));
   }
 
+
+  @Test
+void addListWords() throws IOException {
+    // Create a list of new words
+    List<Map<String, String>> newWords = new ArrayList<>();
+
+    Map<String, String> word1 = new HashMap<>();
+    word1.put("word", "laptop");
+    word1.put("wordGroup", "technology");
+
+    Map<String, String> word2 = new HashMap<>();
+    word2.put("word", "coffee");
+    word2.put("wordGroup", "beverage");
+
+    Map<String, String> word3 = new HashMap<>();
+    word3.put("word", "book");
+    word3.put("wordGroup", "literature");
+
+    newWords.add(word1);
+    newWords.add(word2);
+    newWords.add(word3);
+
+    // Convert the list to JSON
+    String newWordsJson = javalinJackson.toJsonString(newWords, List.class);
+
+    // Mock the context to return the JSON when body is called
+    when(ctx.body()).thenReturn(newWordsJson);
+
+    // Mock the body validator to return a validated list of words
+    when(ctx.bodyValidator(any(Class.class)))
+        .thenReturn(new BodyValidator<>(newWordsJson, List.class, () -> newWords));
+
+    // Call the method under test
+    wordController.addListWords(ctx);
+
+    // Verify that the response status is created
+    verify(ctx).status(HttpStatus.CREATED);
+
+    // Capture the response JSON
+    ArgumentCaptor<Map<String, Object>> mapCaptor = ArgumentCaptor.forClass(Map.class);
+    verify(ctx).json(mapCaptor.capture());
+
+    // Check that the inserted IDs match the IDs returned by the insertMany operation
+    Map<String, Object> responseMap = mapCaptor.getValue();
+    List<String> insertedIds = (List<String>) responseMap.get("insertedIds");
+
+    // Verify that the words are actually added to the MongoDB
+    for (String id : insertedIds) {
+        Document addedWord = db.getCollection("words").find(eq("_id", new ObjectId(id))).first();
+        assertNotNull(addedWord);
+        assertTrue(newWords.stream().anyMatch(word ->
+            word.get("word").equals(addedWord.get("word")) &&
+            word.get("wordGroup").equals(addedWord.get("wordGroup"))
+        ));
+    }
 }
+
+
+}
+
+
+
+
 
 
 
