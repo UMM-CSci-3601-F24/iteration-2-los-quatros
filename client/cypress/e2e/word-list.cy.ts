@@ -21,6 +21,6 @@ describe('Anagram Solver', () => {
   it('should click add word group and go to right url', () => {
     page.addWordButton().click();
     cy.url().should(url => expect(url.endsWith('/anagram/new')).to.be.true);
-    cy.get('add-word-title').should('have-text', 'New Word Group');
+    cy.get('.add-word-title').should('have.text', 'New Word Group');
   });
 });
