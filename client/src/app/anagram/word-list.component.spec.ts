@@ -7,15 +7,21 @@ import { MockWordService } from 'src/testing/word.service.mock';
 import { Word } from './word';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { Observable } from 'rxjs';
+import { RouterTestingModule } from '@angular/router/testing';
+
+const COMMON_IMPORTS: unknown[] = [
+  RouterTestingModule,
+  BrowserAnimationsModule,
+]
 
 describe('Word List', () => {
   let wordList: WordListComponent;
   let fixture: ComponentFixture<WordListComponent>;
 
-  beforeEach(async () => {
+  beforeEach(() => {
     TestBed.configureTestingModule({
-      imports: [WordListComponent, BrowserAnimationsModule],
-      providers: [{provide: WordService, useValue: new MockWordService}],
+      imports: [COMMON_IMPORTS, WordListComponent],
+      providers: [{provide: WordService, useValue: new MockWordService() }],
     });
   });
 
@@ -58,7 +64,7 @@ describe('misbehaving word list', () => {
         }),
     };
     TestBed.configureTestingModule({
-      imports: [WordListComponent, BrowserAnimationsModule],
+      imports: [WordListComponent, COMMON_IMPORTS],
       providers: [{provide: WordService, useValue: wordServiceStub}],
     });
   });

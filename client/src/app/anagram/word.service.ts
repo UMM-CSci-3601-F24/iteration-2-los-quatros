@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Word } from './word';
 import { environment } from 'src/environments/environment';
-import { Observable } from 'rxjs';
+import { map, Observable } from 'rxjs';
 import { HttpClient, HttpParams } from '@angular/common/http';
 
 @Injectable({
@@ -44,7 +44,7 @@ export class WordService {
     return filteredWords;
   }
 
-  // addWordsList(newWordsList: Partial<Word>): Observable<string> {
-  //   return this.httpClient.post<{id: string}>(this.wordUrl, newWord).pipe(map(res => res.id));
-  // }
+  addWord(newWord: Partial<Word>): Observable<string> {
+    return this.httpClient.post<{wordGroup: string}>(this.wordUrl, newWord).pipe(map(response => response.wordGroup))
+  }
 }
