@@ -109,6 +109,6 @@ describe('WordService', () => {
 
   /*
   describe('sorting on the client (alphabetical, by length))
-  //test tets hehehe
+  //test tets hehehe gb2
   */
 });
