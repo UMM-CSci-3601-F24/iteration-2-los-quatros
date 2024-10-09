@@ -33,8 +33,8 @@ import umm3601.Controller;
 
 public class WordController implements Controller {
 
-    private static final String API_WORDS = "/api/words";
-    private static final String API_WORD_BY_ID = "/api/words/{id}";
+    private static final String API_WORDS = "/api/anagram";
+    private static final String API_WORD_BY_ID = "/api/anagram/{id}";
     static final String WORD_KEY = "word";
     static final String WORD_GROUP_KEY = "wordGroup";
     static final String SORT_ORDER_KEY = "sortOrder";
@@ -200,7 +200,7 @@ public void deleteWord(Context ctx) {
 
         server.delete(API_WORD_BY_ID, this::deleteWord);
 
-        server.post(API_WORDS, this::addNewWord);
+        // server.post(API_WORDS, this::addNewWord);
 
         server.post(API_WORDS, this::addListWords);
 
