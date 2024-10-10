@@ -137,59 +137,20 @@ private Bson constructSortingOrder(Context ctx) {
         ctx.status(HttpStatus.OK);
   }
 
-  //   public void addListWords(Context ctx) {
-  //       List<Word> newWords = ctx.bodyValidator(List.class)
-  //           .check(list -> list != null && !list.isEmpty(), "Word list cannot be empty")
-  //           .check(list -> {
-  //               for (Object obj : list) {
-  //                   if  (!(obj instanceof Map)) {
-  //                       return false;
-  //                   }
-  //                   Map<String, String> wordMap = (Map<String, String>) obj;
-  //                   if (!wordMap.containsKey("word") || wordMap.get("word").isBlank()) {
-  //                       return false;
-  //                   }
-  //                   if (!wordMap.containsKey("wordGroup") || wordMap.get("wordGroup").isBlank()) {
-  //                       return false;
-  //                   }
-  //               }
-  //               return true;
-  //           }, "Each word in the list must have a non-empty 'word' and 'wordGroup' field")
-  //           .get();
-  //       if (newWords.size() == 1) {
-  //             addNewWord(ctx);
-  //           } else {
-  //       List<Word> wordList = new ArrayList<>();
-  //       for (Object obj : newWords) {
-  //           Map<String, String> wordMap = (Map<String, String>) obj;
-  //           Word word = new Word();
-  //           word.word = wordMap.get("word");
-  //           word.wordGroup = wordMap.get("wordGroup");
-  //           wordList.add(word);
-  //       }
-  //       InsertManyResult insertManyResult = wordCollection.insertMany(wordList);
-  //       List<String> insertedIds = new ArrayList<>();
-  //       insertManyResult.getInsertedIds().forEach((key, value) ->
-  //           insertedIds.add(value.asObjectId().getValue().toString())
-  //       );
-  //       ctx.json(Map.of("insertedIds", insertedIds));
-  //       ctx.status(HttpStatus.CREATED);
-  //   }
-  // }
+    public void deleteListWords(Context ctx) {
+      String deleteWordGroup = ctx.pathParam("wordGroup");
+      DeleteResult deleteResult = wordCollection.deleteMany(eq("wordGroup", deleteWordGroup));
 
-    // public void static deleteListWords(Context ctx) {
-    //     String deleteWordGroup = ctx.pathParam("wordGroup");
-    //     DeleteResult deleteResult = wordCollection.deleteMany(eq("wordGroup", null));
+      if (deleteResult.getDeletedCount() == 0) {
+          ctx.status(HttpStatus.NOT_FOUND);
+          throw new NotFoundResponse(
+              "Was unable to delete word group "
+              + deleteWordGroup
+              + "; perhaps illegal word group or no items found in the system?");
+      }
+      ctx.status(HttpStatus.OK);
+  }
 
-    //     if(deleteResult.getDeletedCount() != wordCollection.countDocuments("wordGroup", deleteWordGroup)) {
-    //     ctx.status(HttpStatus.NOT_FOUND);
-    //     throw new NotFoundResponse(
-    //       "Was unable to delete word group "
-    //         + deleteWordGroup
-    //         + "; perhaps illegal word group or an word group for item not in the system?");
-    //     }
-    //     ctx.status(HttpStatus.OK);
-    // }
 
 
 
