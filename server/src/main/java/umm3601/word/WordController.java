@@ -26,7 +26,6 @@ import io.javalin.http.BadRequestResponse;
 import io.javalin.http.Context;
 import io.javalin.http.HttpStatus;
 import io.javalin.http.NotFoundResponse;
-import kotlin.collections.builders.ListBuilder;
 import umm3601.Controller;
 
 @SuppressWarnings("unchecked")
@@ -35,6 +34,7 @@ public class WordController implements Controller {
 
     private static final String API_WORDS = "/api/words";
     private static final String API_WORD_BY_ID = "/api/words/{id}";
+    private static final String API_WORDS_BY_WORDGROUP = "/api/words/wordgroup";
     static final String WORD_KEY = "word";
     static final String WORD_GROUP_KEY = "wordGroup";
     static final String SORT_ORDER_KEY = "sortOrder";
@@ -177,19 +177,20 @@ public void deleteWord(Context ctx) {
     }
   }
 
-    // public void static deleteListWords(Context ctx) {
-    //     String deleteWordGroup = ctx.pathParam("wordGroup");
-    //     DeleteResult deleteResult = wordCollection.deleteMany(eq("wordGroup", null));
+    public void deleteListWords(Context ctx) {
+      String deleteWordGroup = ctx.pathParam("wordGroup");
+      DeleteResult deleteResult = wordCollection.deleteMany(eq("wordGroup", deleteWordGroup));
 
-    //     if(deleteResult.getDeletedCount() != wordCollection.countDocuments("wordGroup", deleteWordGroup)) {
-    //     ctx.status(HttpStatus.NOT_FOUND);
-    //     throw new NotFoundResponse(
-    //       "Was unable to delete word group "
-    //         + deleteWordGroup
-    //         + "; perhaps illegal word group or an word group for item not in the system?");
-    //     }
-    //     ctx.status(HttpStatus.OK);
-    // }
+      if (deleteResult.getDeletedCount() == 0) {
+          ctx.status(HttpStatus.NOT_FOUND);
+          throw new NotFoundResponse(
+              "Was unable to delete word group "
+              + deleteWordGroup
+              + "; perhaps illegal word group or no items found in the system?");
+      }
+      ctx.status(HttpStatus.OK);
+  }
+
 
 
 
@@ -204,7 +205,7 @@ public void deleteWord(Context ctx) {
 
         server.post(API_WORDS, this::addListWords);
 
-        // server.delete(API_WORDS_BY_WORDGROUP, this::deleteListWords);
+        server.delete(API_WORDS_BY_WORDGROUP, this::deleteListWords);
       }
     }
 

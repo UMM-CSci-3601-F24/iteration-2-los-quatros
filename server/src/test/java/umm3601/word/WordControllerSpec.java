@@ -57,8 +57,6 @@ class WordControllerSpec {
     private static MongoDatabase db;
     private static JavalinJackson javalinJackson = new JavalinJackson();
 
-    @SuppressWarnings("unchecked")
-
     @Mock
     private Context ctx;
 
@@ -455,6 +453,26 @@ class WordControllerSpec {
         ));
     }
 }
+
+@Test
+void deleteListWords() throws IOException {
+    String testWordGroup = "testGroup";
+    db.getCollection("words").insertMany(Arrays.asList(
+        new Document().append("word", "word1").append("wordGroup", testWordGroup),
+        new Document().append("word", "word2").append("wordGroup", testWordGroup),
+        new Document().append("word", "word3").append("wordGroup", "otherGroup") // This shouldn't be deleted
+    ));
+    assertEquals(2, db.getCollection("words")
+      .countDocuments(eq("wordGroup", testWordGroup)));
+    when(ctx.pathParam("wordGroup")).thenReturn(testWordGroup);
+    wordController.deleteListWords(ctx);
+    verify(ctx).status(HttpStatus.OK);
+    assertEquals(0, db.getCollection("words")
+      .countDocuments(eq("wordGroup", testWordGroup)));
+    assertEquals(1, db.getCollection("words")
+      .countDocuments(eq("wordGroup", "otherGroup")));
+}
+
 }
 
 
