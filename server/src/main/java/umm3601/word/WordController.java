@@ -34,7 +34,7 @@ import umm3601.Controller;
 public class WordController implements Controller {
 
     private static final String API_WORDS = "/api/anagram";
-    private static final String API_WORD_BY_ID = "/api/anagram/{id}";
+    // private static final String API_WORD_BY_ID = "/api/anagram/{id}";
     static final String WORD_KEY = "word";
     static final String WORD_GROUP_KEY = "wordGroup";
     static final String SORT_ORDER_KEY = "sortOrder";
@@ -137,45 +137,45 @@ public void deleteWord(Context ctx) {
         ctx.status(HttpStatus.OK);
     }
 
-    public void addListWords(Context ctx) {
-        List<Word> newWords = ctx.bodyValidator(List.class)
-            .check(list -> list != null && !list.isEmpty(), "Word list cannot be empty")
-            .check(list -> {
-                for (Object obj : list) {
-                    if  (!(obj instanceof Map)) {
-                        return false;
-                    }
-                    Map<String, String> wordMap = (Map<String, String>) obj;
-                    if (!wordMap.containsKey("word") || wordMap.get("word").isBlank()) {
-                        return false;
-                    }
-                    if (!wordMap.containsKey("wordGroup") || wordMap.get("wordGroup").isBlank()) {
-                        return false;
-                    }
-                }
-                return true;
-            }, "Each word in the list must have a non-empty 'word' and 'wordGroup' field")
-            .get();
-        if (newWords.size() == 1) {
-              addNewWord(ctx);
-            } else {
-        List<Word> wordList = new ArrayList<>();
-        for (Object obj : newWords) {
-            Map<String, String> wordMap = (Map<String, String>) obj;
-            Word word = new Word();
-            word.word = wordMap.get("word");
-            word.wordGroup = wordMap.get("wordGroup");
-            wordList.add(word);
-        }
-        InsertManyResult insertManyResult = wordCollection.insertMany(wordList);
-        List<String> insertedIds = new ArrayList<>();
-        insertManyResult.getInsertedIds().forEach((key, value) ->
-            insertedIds.add(value.asObjectId().getValue().toString())
-        );
-        ctx.json(Map.of("insertedIds", insertedIds));
-        ctx.status(HttpStatus.CREATED);
-    }
-  }
+  //   public void addListWords(Context ctx) {
+  //       List<Word> newWords = ctx.bodyValidator(List.class)
+  //           .check(list -> list != null && !list.isEmpty(), "Word list cannot be empty")
+  //           .check(list -> {
+  //               for (Object obj : list) {
+  //                   if  (!(obj instanceof Map)) {
+  //                       return false;
+  //                   }
+  //                   Map<String, String> wordMap = (Map<String, String>) obj;
+  //                   if (!wordMap.containsKey("word") || wordMap.get("word").isBlank()) {
+  //                       return false;
+  //                   }
+  //                   if (!wordMap.containsKey("wordGroup") || wordMap.get("wordGroup").isBlank()) {
+  //                       return false;
+  //                   }
+  //               }
+  //               return true;
+  //           }, "Each word in the list must have a non-empty 'word' and 'wordGroup' field")
+  //           .get();
+  //       if (newWords.size() == 1) {
+  //             addNewWord(ctx);
+  //           } else {
+  //       List<Word> wordList = new ArrayList<>();
+  //       for (Object obj : newWords) {
+  //           Map<String, String> wordMap = (Map<String, String>) obj;
+  //           Word word = new Word();
+  //           word.word = wordMap.get("word");
+  //           word.wordGroup = wordMap.get("wordGroup");
+  //           wordList.add(word);
+  //       }
+  //       InsertManyResult insertManyResult = wordCollection.insertMany(wordList);
+  //       List<String> insertedIds = new ArrayList<>();
+  //       insertManyResult.getInsertedIds().forEach((key, value) ->
+  //           insertedIds.add(value.asObjectId().getValue().toString())
+  //       );
+  //       ctx.json(Map.of("insertedIds", insertedIds));
+  //       ctx.status(HttpStatus.CREATED);
+  //   }
+  // }
 
     // public void static deleteListWords(Context ctx) {
     //     String deleteWordGroup = ctx.pathParam("wordGroup");
@@ -194,19 +194,19 @@ public void deleteWord(Context ctx) {
 
 
   public void addRoutes(Javalin server) {
-        server.get(API_WORD_BY_ID, this::getWord);
+    // server.get(API_WORD_BY_ID, this::getWord);
 
-        server.get(API_WORDS, this::getWords);
+    server.get(API_WORDS, this::getWords);
 
-        server.delete(API_WORD_BY_ID, this::deleteWord);
+    // server.delete(API_WORD_BY_ID, this::deleteWord);
 
-        // server.post(API_WORDS, this::addNewWord);
+    server.post(API_WORDS, this::addNewWord);
 
-        server.post(API_WORDS, this::addListWords);
+    // server.post(API_WORDS, this::addListWords);
 
-        // server.delete(API_WORDS_BY_WORDGROUP, this::deleteListWords);
-      }
-    }
+    // server.delete(API_WORDS_BY_WORDGROUP, this::deleteListWords);
+  }
+}
 
 
 
