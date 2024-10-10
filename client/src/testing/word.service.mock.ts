@@ -12,7 +12,7 @@ export class MockWordService extends WordService {
     {
       _id:"El_id",
       word: "El",
-      wordGroup: "team members",
+      wordGroup: "team member",
     },
     {
       _id:"Mac_id",

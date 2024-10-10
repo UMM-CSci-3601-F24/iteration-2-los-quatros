@@ -1,6 +1,6 @@
 import { Component, computed, signal } from '@angular/core';
 import { MatCardModule } from '@angular/material/card';
-// import { MatFormField } from '@angular/material/form-field';
+import { MatFormField } from '@angular/material/form-field';
 import { MatRadioModule } from '@angular/material/radio';
 import { MatSelectModule } from '@angular/material/select';
 import { FormsModule } from '@angular/forms';
@@ -15,13 +15,15 @@ import { RouterLink } from '@angular/router';
 import { MatButtonModule } from '@angular/material/button';
 import { MatTooltip } from '@angular/material/tooltip';
 import { MatNavList } from '@angular/material/list';
+import { MatListModule } from '@angular/material/list';
+import { MatInputModule } from '@angular/material/input';
 
 @Component({
   selector: 'app-word-list-component',
   standalone: true,
   imports: [
     MatCardModule,
-    // MatFormField,
+    MatFormField,
     MatRadioModule,
     MatSelectModule,
     MatFormFieldModule,
@@ -31,6 +33,8 @@ import { MatNavList } from '@angular/material/list';
     MatButtonModule,
     MatTooltip,
     MatNavList,
+    MatListModule,
+    MatInputModule,
   ],
   templateUrl: './word-list.component.html',
   styleUrl: './word-list.component.scss'
@@ -80,7 +84,6 @@ export class WordListComponent {
         })
       )
     );
-
 
   filteredWords = computed(() => {
     const serverFilteredWords = this.serverFilteredWords();

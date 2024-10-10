@@ -44,9 +44,18 @@ describe('Word List', () => {
       wordList.serverFilteredWords().some((word: Word) => word.word === 'Mac')
     ).toBe(true);
   });
-  // it has 4 words in group group members
-  //it has one word in group 'teachers'
+  it('has four words in the group `team members`', () => {
+    expect(
+      wordList.serverFilteredWords().filter((word: Word) => word.wordGroup === "team member").length
+    ).toBe(4);
+  });
+  it('has one word in the group `teachers`', () => {
+    expect(
+      wordList.serverFilteredWords().filter((word: Word) => word.wordGroup === "teachers").length
+    ).toBe(1);
+  });
 });
+
 describe('misbehaving word list', () => {
   let wordList: WordListComponent;
   let fixture: ComponentFixture<WordListComponent>;
@@ -118,7 +127,7 @@ describe('misbehaving word list', () => {
 //     });
 //   }));
 
-//   it('delete word returns correct message', () => {
+//   it('delete word removes word', () => {
 //     wordList.deleteWord("Mac_id");
 //     expect(wordList.serverFilteredWords().filter((word: Word) =>
 //       word._id === 'Mac_id').length).toBe(0)
