@@ -104,4 +104,10 @@ export class WordListComponent {
       this.snackBar.open(`We deleted a word!`, 'OK', {duration: 6000});
     })
   }
+
+  deleteWordGroup(group: string) {
+    this.wordService.deleteWordGroup(group).subscribe(() => {
+      this.snackBar.open(`We deleted a word group!`, 'OK', {duration: 6000});
+    })
+  }
 }

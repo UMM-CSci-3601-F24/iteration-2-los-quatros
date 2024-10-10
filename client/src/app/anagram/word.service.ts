@@ -53,4 +53,8 @@ export class WordService {
   deleteWord(id: string): Observable<void> {
     return this.httpClient.delete<void>(`${this.wordUrl}/${id}`);
   }
+
+  deleteWordGroup(group: string): Observable<void> {
+    return this.httpClient.delete<void>(`${this.wordUrl}/${group}`);
+  }
 }
