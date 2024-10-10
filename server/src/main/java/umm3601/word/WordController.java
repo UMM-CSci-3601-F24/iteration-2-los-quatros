@@ -203,9 +203,9 @@ public void deleteWord(Context ctx) {
 
         server.post(API_WORDS, this::addNewWord);
 
-        server.post(API_WORDS, this::addListWords);
+        // server.post(API_WORDS, this::addListWords);
 
-        server.delete(API_WORDS_BY_WORDGROUP, this::deleteListWords);
+        // server.delete(API_WORDS_BY_WORDGROUP, this::deleteListWords);
       }
     }
 
