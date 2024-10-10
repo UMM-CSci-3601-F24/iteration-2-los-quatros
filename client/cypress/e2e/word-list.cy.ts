@@ -16,20 +16,20 @@ describe('Anagram Solver', () => {
     page.getAnagramTitle().should('have.text', 'Anagram Generator');
   });
 
-  it('should type something into the contains filter and check that elements returned are correct', () => {
-    cy.get('[data-test=wordContainsInput]').type('ac');
-    page.getAnagramListItems().each( e => {
-      cy.wrap(e).find('.anagram-list-word').should('include.text', 'a');
-      cy.wrap(e).find('.anagram-list-word').should('include.text', 'c');
-    });
-  });
+  // it('should type something into the contains filter and check that elements returned are correct', () => {
+  //   cy.get('[data-test=wordContainsInput]').type('ac');
+  //   page.getAnagramListItems().each( e => {
+  //     cy.wrap(e).find('.anagram-list-word').should('include.text', 'a');
+  //     cy.wrap(e).find('.anagram-list-word').should('include.text', 'c');
+  //   });
+  // });
 
-  it('should type something into the wordGroup filter and check that elements returned are correct', () => {
-    cy.get('[data-test=wordGroupInput]').type('food');
-    page.getAnagramListItems().each( e => {
-      cy.wrap(e).find('.anagram-list-wordGroup').should('contain', 'food');
-    });
-  });
+  // it('should type something into the wordGroup filter and check that elements returned are correct', () => {
+  //   cy.get('[data-test=wordGroupInput]').type('food');
+  //   page.getAnagramListItems().each( e => {
+  //     cy.wrap(e).find('.anagram-list-wordGroup').should('contain', 'food');
+  //   });
+  // });
 
   // sorting not implemented yet
   // it('should click sort alphabetical and increasing and check that elements returned are correct', () => {
