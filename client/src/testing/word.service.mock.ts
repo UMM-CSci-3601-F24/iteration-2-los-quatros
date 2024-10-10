@@ -10,22 +10,27 @@ import { AppComponent } from "src/app/app.component";
 export class MockWordService extends WordService {
   static testWords: Word[] = [
     {
+      _id:"El_id",
       word: "El",
-      wordGroup: "team members",
+      wordGroup: "team member",
     },
     {
+      _id:"Mac_id",
       word: "Mac",
       wordGroup: "team member",
     },
     {
+      _id:"Jakob_id",
       word: "Jakob",
       wordGroup: "team member",
     },
     {
+      _id:"Keenan_id",
       word: "Kennan",
       wordGroup: "team member",
     },
     {
+      _id:"Nic_id",
       word: "Nic",
       wordGroup: "teachers",
     },

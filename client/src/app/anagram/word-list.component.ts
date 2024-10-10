@@ -1,6 +1,6 @@
 import { Component, computed, signal } from '@angular/core';
 import { MatCardModule } from '@angular/material/card';
-// import { MatFormField } from '@angular/material/form-field';
+import { MatFormField } from '@angular/material/form-field';
 import { MatRadioModule } from '@angular/material/radio';
 import { MatSelectModule } from '@angular/material/select';
 import { FormsModule } from '@angular/forms';
@@ -14,13 +14,17 @@ import { MatIconModule } from '@angular/material/icon';
 import { RouterLink } from '@angular/router';
 import { MatButtonModule } from '@angular/material/button';
 import { MatTooltip } from '@angular/material/tooltip';
+import { MatNavList } from '@angular/material/list';
+import { MatListModule } from '@angular/material/list';
+import { MatInputModule } from '@angular/material/input';
+import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 
 @Component({
   selector: 'app-word-list-component',
   standalone: true,
   imports: [
     MatCardModule,
-    // MatFormField,
+    MatFormField,
     MatRadioModule,
     MatSelectModule,
     MatFormFieldModule,
@@ -29,14 +33,19 @@ import { MatTooltip } from '@angular/material/tooltip';
     RouterLink,
     MatButtonModule,
     MatTooltip,
+    MatNavList,
+    MatListModule,
+    MatInputModule,
+    MatSlideToggleModule,
   ],
   templateUrl: './word-list.component.html',
   styleUrl: './word-list.component.scss'
 })
 export class WordListComponent {
+
   // client side sorting
   sortType = signal<string | undefined>(undefined);
-  sortOrder = signal<string | undefined>(undefined);
+  sortOrder = signal<boolean | undefined>(false);
   //server side filtering
   contains = signal<string|undefined>(undefined);
   group = signal<string|undefined>(undefined);
@@ -78,12 +87,21 @@ export class WordListComponent {
       )
     );
 
-
   filteredWords = computed(() => {
     const serverFilteredWords = this.serverFilteredWords();
-    return this.wordService.filterWords(serverFilteredWords, {
+    return this.wordService.sortWords(serverFilteredWords, {
       sortType: this.sortType(),
       sortOrder: this.sortOrder(),
     });
   });
+
+  deleteWord(id: string) {
+    // const tempSortType = this.sortType.toString;
+    this.wordService.deleteWord(id).subscribe(() => {
+      // this is to refresh the page eventually
+      // this.sortType.set(undefined);
+      // this.sortType.set(tempSortType.toString());
+      this.snackBar.open(`We deleted a word!`, 'OK', {duration: 6000});
+    })
+  }
 }

@@ -16,7 +16,38 @@ describe('Anagram Solver', () => {
     page.getAnagramTitle().should('have.text', 'Anagram Generator');
   });
 
-  // a bunch of tests for filtering and sorting gb2
+  // it('should type something into the contains filter and check that elements returned are correct', () => {
+  //   cy.get('[data-test=wordContainsInput]').type('ac');
+  //   page.getAnagramListItems().each( e => {
+  //     cy.wrap(e).find('.anagram-list-word').should('include.text', 'a');
+  //     cy.wrap(e).find('.anagram-list-word').should('include.text', 'c');
+  //   });
+  // });
+
+  // it('should type something into the wordGroup filter and check that elements returned are correct', () => {
+  //   cy.get('[data-test=wordGroupInput]').type('food');
+  //   page.getAnagramListItems().each( e => {
+  //     cy.wrap(e).find('.anagram-list-wordGroup').should('contain', 'food');
+  //   });
+  // });
+
+  // sorting not implemented yet
+  // it('should click sort alphabetical and increasing and check that elements returned are correct', () => {
+  //   cy.get('[data-test=sortTypeSelect]').get('mat-option').contains('Alphabetical').click();
+  //   cy.get('[data-test=sortOrderSelect]').get('mat-radio-button').contains('Increasing').click();
+  //   let lastLetter: "A";
+  //   page.getAnagramListItems().each( e => {
+  //     const tempLetter = cy.wrap(e).find('.anagram-list-word').toString().charAt(0);
+  //     // tempLetter.should('not.be.greaterThan', lastLetter);
+  //     // // expect(tempLetter).to.not.be.above(lastLetter).
+  //     // cy.wrap(e).find('.anagram-list-word').toString().charAt(0).should('not.be.greaterThan',lastLetter);
+  //     expect(lastLetter).to.not.be.at.most(tempLetter);
+  //     lastLetter = tempLetter;
+  //   });
+  // });
+
+  // it('should click sort alphabetical and decreasing and check that elements returned are correct', () => {
+  // });
 
   it('should click add word group and go to right url', () => {
     page.addWordButton().click();

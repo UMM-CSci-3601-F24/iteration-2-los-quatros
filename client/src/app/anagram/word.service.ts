@@ -31,20 +31,26 @@ export class WordService {
       params: httpParams,
     });
   }
-  filterWords(words: Word[], filters: {sortType?: string; sortOrder?: string}): Word[] {
+  sortWords(words: Word[], filters: {sortType?: string; sortOrder?: boolean}): Word[] {
     const filteredWords = words;
     //let filteredWords = words;
 
     if(filters.sortType) {
-      //magic magic magic
+      if(filters.sortType === "alphabetical"){
+        filteredWords.sort();
+      }
     }
     if(filters.sortOrder) {
-      //magic magic
+      filteredWords.reverse();
     }
     return filteredWords;
   }
 
   addWord(newWord: Partial<Word>): Observable<string> {
-    return this.httpClient.post<{wordGroup: string}>(this.wordUrl, newWord).pipe(map(response => response.wordGroup))
+    return this.httpClient.post<{id: string}>(this.wordUrl, newWord).pipe(map(response => response.id))
+  }
+
+  deleteWord(id: string): Observable<void> {
+    return this.httpClient.delete<void>(`${this.wordUrl}/${id}`);
   }
 }
