@@ -42,6 +42,9 @@
             @for (word of filteredWords(); track word._id) {
               <!-- this is kind of an awful track command-->
               <span matListItemTitle mat-line class="anagram-list-word">{{word.word}}</span>
+              <button mat-fab class="delete-word-fab" matToolTips="Delete Word" matTooltipPosition="right" (click)="deleteWord(word._id)" routerLink="/anagram" data-test="deleteTodoButton">
+                <mat-icon class="md-24" aria-label="Delete Word">delete</mat-icon>
+              </button>
               <br>
             }
           </mat-nav-list>

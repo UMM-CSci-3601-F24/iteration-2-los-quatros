@@ -36,6 +36,7 @@ import { MatNavList } from '@angular/material/list';
   styleUrl: './word-list.component.scss'
 })
 export class WordListComponent {
+
   // client side sorting
   sortType = signal<string | undefined>(undefined);
   sortOrder = signal<string | undefined>(undefined);
@@ -88,4 +89,14 @@ export class WordListComponent {
       sortOrder: this.sortOrder(),
     });
   });
+
+  deleteWord(id: string) {
+    const tempSortType = this.sortType.toString;
+    this.wordService.deleteWord(id).subscribe(() => {
+      // this is to refresh the page eventually
+      this.sortType.set(undefined);
+      this.sortType.set(tempSortType.toString());
+      this.snackBar.open(`We deleted a word!`, 'OK', {duration: 6000});
+    })
+  }
 }

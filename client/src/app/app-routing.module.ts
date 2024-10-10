@@ -16,6 +16,8 @@ const routes: Routes = [
   {path: 'users', component: UserListComponent, title: 'Users'},
   {path: 'anagram', component: WordListComponent, title: 'Anagram'},
   {path: 'anagram/new', component: AddWordComponent, title: 'Add Word'},
+  // this is kind of backwards but allows us to pass an id for deleteWord without having profile
+  {path: 'anagram/:id', component: WordListComponent, title: 'Anagram'},
   {path: 'users/new', component: AddUserComponent, title: 'Add User'},
   {path: 'users/:id', component: UserProfileComponent, title: 'User Profile'},
   {path: 'companies', component: CompanyListComponent, title: 'Companies'}

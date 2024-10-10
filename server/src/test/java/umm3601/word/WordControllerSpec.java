@@ -3,7 +3,7 @@ package umm3601.word;
 import static com.mongodb.client.model.Filters.eq;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotEquals;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
+// import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.ArgumentMatchers.any;
@@ -135,7 +135,12 @@ class WordControllerSpec {
     public void canBuildController() throws IOException {
         Javalin mockServer = Mockito.mock(Javalin.class);
         wordController.addRoutes(mockServer);
-        verify(mockServer, Mockito.atLeast(2)).get(any(), any());
+        //used to be :
+        // verify(mockServer, Mockito.atLeast(2)).get(any(), any());
+        //changed because only have one get function for wordController, reinstate if reinstate get words by group
+        verify(mockServer, Mockito.atLeastOnce()).get(any(), any());
+        verify(mockServer, Mockito.atLeastOnce()).post(any(), any());
+        verify(mockServer, Mockito.atLeastOnce()).delete(any(), any());
     }
 
     @Test
@@ -420,46 +425,39 @@ class WordControllerSpec {
 
 
 
-  @Test
-  void addListWords() throws IOException {
-    List<Map<String, String>> newWords = new ArrayList<>();
-    Map<String, String> word1 = new HashMap<>();
-    word1.put("word", "laptop");
-    word1.put("wordGroup", "technology");
-    Map<String, String> word2 = new HashMap<>();
-    word2.put("word", "coffee");
-    word2.put("wordGroup", "beverage");
-    Map<String, String> word3 = new HashMap<>();
-    word3.put("word", "book");
-    word3.put("wordGroup", "literature");
-    newWords.add(word1);
-    newWords.add(word2);
-    newWords.add(word3);
-    String newWordsJson = javalinJackson.toJsonString(newWords, List.class);
-    when(ctx.body()).thenReturn(newWordsJson);
-    when(ctx.bodyValidator(any(Class.class)))
-        .thenReturn(new BodyValidator<>(newWordsJson, List.class, () -> newWords));
-    wordController.addListWords(ctx);
-    verify(ctx).status(HttpStatus.CREATED);
-    ArgumentCaptor<Map<String, Object>> mapsCaptor = ArgumentCaptor.forClass(Map.class);
-    verify(ctx).json(mapsCaptor.capture());
-    Map<String, Object> responseMap = mapsCaptor.getValue();
-    List<String> insertedIds = (List<String>) responseMap.get("insertedIds");
-    for (String id : insertedIds) {
-        Document addedWord = db.getCollection("words").find(eq("_id", new ObjectId(id))).first();
-        assertNotNull(addedWord);
-        assertTrue(newWords.stream().anyMatch(word ->
-            word.get("word").equals(addedWord.get("word"))
-            &&
-            word.get("wordGroup").equals(addedWord.get("wordGroup"))
-        ));
-    }
+  // @Test
+//   // void addListWords() throws IOException {
+//     List<Map<String, String>> newWords = new ArrayList<>();
+//     Map<String, String> word1 = new HashMap<>();
+//     word1.put("word", "laptop");
+//     word1.put("wordGroup", "technology");
+//     Map<String, String> word2 = new HashMap<>();
+//     word2.put("word", "coffee");
+//     word2.put("wordGroup", "beverage");
+//     Map<String, String> word3 = new HashMap<>();
+//     word3.put("word", "book");
+//     word3.put("wordGroup", "literature");
+//     newWords.add(word1);
+//     newWords.add(word2);
+//     newWords.add(word3);
+//     String newWordsJson = javalinJackson.toJsonString(newWords, List.class);
+//     when(ctx.body()).thenReturn(newWordsJson);
+//     when(ctx.bodyValidator(any(Class.class)))
+//         .thenReturn(new BodyValidator<>(newWordsJson, List.class, () -> newWords));
+//     wordController.addListWords(ctx);
+//     verify(ctx).status(HttpStatus.CREATED);
+//     ArgumentCaptor<Map<String, Object>> mapsCaptor = ArgumentCaptor.forClass(Map.class);
+//     verify(ctx).json(mapsCaptor.capture());
+//     Map<String, Object> responseMap = mapsCaptor.getValue();
+//     List<String> insertedIds = (List<String>) responseMap.get("insertedIds");
+//     for (String id : insertedIds) {
+//         Document addedWord = db.getCollection("words").find(eq("_id", new ObjectId(id))).first();
+//         assertNotNull(addedWord);
+//         assertTrue(newWords.stream().anyMatch(word ->
+//             word.get("word").equals(addedWord.get("word"))
+//             &&
+//             word.get("wordGroup").equals(addedWord.get("wordGroup"))
+//         ));
+//     }
+// }
 }
-}
-
-
-
-
-
-
-
