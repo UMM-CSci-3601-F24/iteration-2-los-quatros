@@ -9,22 +9,27 @@ import { of } from 'rxjs';
 describe('WordService', () => {
   const testWords: Word[] = [
     {
+      _id: "El_id",
       word: 'El',
       wordGroup: 'team members',
     },
     {
+      _id: "Mac_id",
       word: 'Mac',
       wordGroup: 'team member',
     },
     {
+      _id: "Jakob_id",
       word: 'Jakob',
       wordGroup: 'team member',
     },
     {
+      _id: "Kennan_id",
       word: 'Kennan',
       wordGroup: 'team member',
     },
     {
+      _id: "Nic_id",
       word: 'Nic',
       wordGroup: 'teachers',
     },

@@ -14,6 +14,7 @@ import { MatIconModule } from '@angular/material/icon';
 import { RouterLink } from '@angular/router';
 import { MatButtonModule } from '@angular/material/button';
 import { MatTooltip } from '@angular/material/tooltip';
+import { MatNavList } from '@angular/material/list';
 
 @Component({
   selector: 'app-word-list-component',
@@ -29,6 +30,7 @@ import { MatTooltip } from '@angular/material/tooltip';
     RouterLink,
     MatButtonModule,
     MatTooltip,
+    MatNavList,
   ],
   templateUrl: './word-list.component.html',
   styleUrl: './word-list.component.scss'

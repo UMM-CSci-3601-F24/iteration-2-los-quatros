@@ -34,5 +34,29 @@
 </button>
 
 <div class="flex-row">
-  <p>put words here</p>
+  @if(serverFilteredWords()) {
+    <div class="flex-1">
+      <mat-card>
+        <mat-card-content>
+          <mat-nav-list class="anagram-nav-list">
+            @for (word of filteredWords(); track word._id) {
+              <!-- this is kind of an awful track command-->
+              <span matListItemTitle mat-line class="anagram-list-word">{{word.word}}</span>
+              <br>
+            }
+          </mat-nav-list>
+        </mat-card-content>
+      </mat-card>
+    </div>
+  } @else {
+    <div class="flex-1" class="anagram-error">
+      <mat-error>
+        There was a problem loading the words.
+        Possibly the server is down or perhaps there are network issues.
+      </mat-error>
+      <mat-error>
+        Please wait a bit and try again or start the server.
+      </mat-error>
+    </div>
+  }
 </div>
