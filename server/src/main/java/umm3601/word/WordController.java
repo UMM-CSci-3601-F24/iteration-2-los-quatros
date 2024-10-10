@@ -35,6 +35,7 @@ public class WordController implements Controller {
 
     private static final String API_WORDS = "/api/anagram";
     private static final String API_WORD_BY_ID = "/api/anagram/{id}";
+    private static final String API_WORDS_BY_WORDGROUP = "/api/anagram/{wordGroup}";
     static final String WORD_KEY = "word";
     static final String WORD_GROUP_KEY = "wordGroup";
     static final String SORT_ORDER_KEY = "sortOrder";
@@ -165,7 +166,7 @@ private Bson constructSortingOrder(Context ctx) {
 
     // server.post(API_WORDS, this::addListWords);
 
-    // server.delete(API_WORDS_BY_WORDGROUP, this::deleteListWords);
+    server.delete(API_WORDS_BY_WORDGROUP, this::deleteListWords);
   }
 }
 
