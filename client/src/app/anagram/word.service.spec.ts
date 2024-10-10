@@ -142,6 +142,10 @@ describe('WordService', () => {
     //   wordService.sortWords(testWords, {sortType: "alphabetical", sortOrder: false});
     //   expect()
     // })
+    it('returns a list of 5 words after calling sort function', () => {
+      const filteredWords = wordService.sortWords(testWords, {sortType: "alphabetical", sortOrder: false});
+      expect(filteredWords.length).toBe(5);
+    })
   })
 
   describe('Adding a word using `addWord()`', () => {
