@@ -18,17 +18,21 @@
         <mat-form-field class="input-field">
           <mat-label>Sort</mat-label>
           <mat-select [(ngModel)]="sortType" data-test="sortTypeSelect">
-            <mat-option>--</mat-option>
-            <mat-option>Alphabetical</mat-option>
+            <mat-option value=null>--</mat-option>
+            <mat-option value="alphabetical">Alphabetical</mat-option>
           </mat-select>
         </mat-form-field>
         <div>
-          <label for="sortOrder">Sort Order</label>
+          <!-- <label for="sortOrder">Sort Order</label>
           <mat-radio-group aria-label="Sort Order" [(ngModel)]="sortOrder" data-test="sortOrderRadio">
-            <!-- <mat-radio-button>--</mat-radio-button> -->
-            <mat-radio-button>Increasing</mat-radio-button>
-            <mat-radio-button>Decreasing</mat-radio-button>
-          </mat-radio-group>
+            <mat-radio-button value="increasing">Increasing</mat-radio-button>
+            <mat-radio-button value="decreasing">Decreasing</mat-radio-button>
+          </mat-radio-group> -->
+          <p>
+            <mat-slide-toggle class="sortOrder" [(ngModel)]="sortOrder" data-test="sortOrderToggle" aria-label="Change sort order">
+              Change Sort Order
+            </mat-slide-toggle>
+          </p>
         </div>
         <button mat-fab class="add-word-fab" matTooltip="Add New Word Group" matTooltipPosition="right" routerLink="/anagram/new" data-test="addWordButton">
           <mat-icon class="md-24" aria-label="Add Word List">add</mat-icon>

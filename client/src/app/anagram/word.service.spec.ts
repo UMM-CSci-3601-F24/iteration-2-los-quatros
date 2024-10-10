@@ -5,6 +5,7 @@ import { Word } from './word';
 import { HttpClient, HttpParams, provideHttpClient, withInterceptorsFromDi } from '@angular/common/http';
 import { HttpTestingController, provideHttpClientTesting } from '@angular/common/http/testing';
 import { of } from 'rxjs';
+// import { MockWordService } from 'src/testing/word.service.mock';
 
 describe('WordService', () => {
   const testWords: Word[] = [
@@ -112,10 +113,36 @@ describe('WordService', () => {
     });
   });
 
-  /*
-  describe('sorting on the client (alphabetical, by length))
-  //test tets hehehe gb2
-  */
+  describe('sorting on the client (alphabetical, by length)', () => {
+    // it('filters by alphabetical increasing', () => {
+    //   const sortType = "alphabetical";
+    //   const sortOrder = false;
+    //   console.log(`Words before sorting: ${testWords.map(w => w.word)}`);
+    //   const filteredWords = wordService.sortWords(testWords, {sortType: sortType, sortOrder: sortOrder});
+    //   console.log(`Words after sorting: ${filteredWords.map(w => w.word)}`);
+    //   console.log(`Test words after sorting: ${testWords.map(w => w.word)}`);
+    //   expect(filteredWords[0].word).toBe("El");
+    //   expect(filteredWords[1].word).toBe("Jakob");
+    //   expect(filteredWords[2].word).toBe("Keenan");
+    //   expect(filteredWords[3].word).toBe("Mac");
+    //   expect(filteredWords[4].word).toBe("Nic");
+    // });
+    // it('filters by alphabetical decreasing', () => {
+    //   const sortType = "alphabetical";
+    //   const sortOrder = true;
+    //   const filteredWords = wordService.sortWords(testWords, {sortType: sortType, sortOrder: sortOrder});
+    //   expect(filteredWords[4].word).toBe("El");
+    //   expect(filteredWords[3].word).toBe("Jakob");
+    //   expect(filteredWords[2].word).toBe("Keenan");
+    //   expect(filteredWords[1].word).toBe("Mac");
+    //   expect(filteredWords[0].word).toBe("Nic");
+    // });
+    // it('calls sortWords with proper params', () => {
+    //   // const mockedMethod = spyOn(httpClient, 'get').and.returnValue(of(testWords));
+    //   wordService.sortWords(testWords, {sortType: "alphabetical", sortOrder: false});
+    //   expect()
+    // })
+  })
 
   describe('Adding a word using `addWord()`', () => {
     it('talks to the right endpoint and is called once', waitForAsync(() => {

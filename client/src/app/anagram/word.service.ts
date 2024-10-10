@@ -31,15 +31,17 @@ export class WordService {
       params: httpParams,
     });
   }
-  filterWords(words: Word[], filters: {sortType?: string; sortOrder?: string}): Word[] {
+  sortWords(words: Word[], filters: {sortType?: string; sortOrder?: boolean}): Word[] {
     const filteredWords = words;
     //let filteredWords = words;
 
     if(filters.sortType) {
-      //magic magic magic
+      if(filters.sortType === "alphabetical"){
+        filteredWords.sort();
+      }
     }
     if(filters.sortOrder) {
-      //magic magic
+      filteredWords.reverse();
     }
     return filteredWords;
   }
