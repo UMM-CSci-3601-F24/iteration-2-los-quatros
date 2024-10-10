@@ -116,4 +116,46 @@ describe('WordService', () => {
   describe('sorting on the client (alphabetical, by length))
   //test tets hehehe gb2
   */
+
+  describe('Adding a word using `addWord()`', () => {
+    it('talks to the right endpoint and is called once', waitForAsync(() => {
+      const word_id = 'pat_id';
+      const expected_http_response = { id: word_id } ;
+
+      const mockedMethod = spyOn(httpClient, 'post')
+        .and
+        .returnValue(of(expected_http_response));
+
+      wordService.addWord(testWords[1]).subscribe((new_word_id) => {
+        expect(new_word_id).toBe(word_id);
+        expect(mockedMethod)
+          .withContext('one call')
+          .toHaveBeenCalledTimes(1);
+        expect(mockedMethod)
+          .withContext('talks to the correct endpoint')
+          .toHaveBeenCalledWith(wordService.wordUrl, testWords[1]);
+      });
+    }));
+  })
+
+
+  describe('Deleting a word using deleteWord()', () => {
+    it('Talks to correct endpoint with correct call', waitForAsync(() => {
+      const targetWord: Word = testWords[1];
+      const targetId: string = targetWord._id;
+
+      const mockedMethod = spyOn(httpClient, 'delete')
+        .and
+        .returnValue(of(targetWord));
+
+      wordService.deleteWord(targetId).subscribe(() => {
+        expect(mockedMethod)
+          .withContext('one call')
+          .toHaveBeenCalledTimes(1);
+        expect(mockedMethod)
+          .withContext('talks to the correct endpoint')
+          .toHaveBeenCalledWith(`${wordService.wordUrl}/${targetId}`);
+      });
+    }))
+  })
 });

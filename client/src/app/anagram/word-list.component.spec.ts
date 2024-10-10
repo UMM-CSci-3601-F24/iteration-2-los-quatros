@@ -97,3 +97,30 @@ describe('misbehaving word list', () => {
       .toContain('Problem contacting the server – Error Code:');
   });
 });
+
+// describe('delete Word', () => {
+//   let wordList: WordListComponent;
+//   let fixture: ComponentFixture<WordListComponent>;
+
+
+//   beforeEach(() => {
+//     TestBed.configureTestingModule({
+//       imports: [COMMON_IMPORTS, WordListComponent],
+//       providers: [{provide: WordService, useValue: new MockWordService() }],
+//     });
+//   });
+
+//   beforeEach(waitForAsync(() => {
+//     TestBed.compileComponents().then(() => {
+//       fixture = TestBed.createComponent(WordListComponent);
+//       wordList = fixture.componentInstance;
+//       fixture.detectChanges();
+//     });
+//   }));
+
+//   it('delete word returns correct message', () => {
+//     wordList.deleteWord("Mac_id");
+//     expect(wordList.serverFilteredWords().filter((word: Word) =>
+//       word._id === 'Mac_id').length).toBe(0)
+//   });
+// })

@@ -19,14 +19,14 @@ import org.mongojack.JacksonMongoCollection;
 import com.mongodb.client.MongoDatabase;
 import com.mongodb.client.model.Sorts;
 import com.mongodb.client.result.DeleteResult;
-import com.mongodb.client.result.InsertManyResult;
+// import com.mongodb.client.result.InsertManyResult;
 
 import io.javalin.Javalin;
 import io.javalin.http.BadRequestResponse;
 import io.javalin.http.Context;
 import io.javalin.http.HttpStatus;
 import io.javalin.http.NotFoundResponse;
-import kotlin.collections.builders.ListBuilder;
+// import kotlin.collections.builders.ListBuilder;
 import umm3601.Controller;
 
 @SuppressWarnings("unchecked")
@@ -34,7 +34,7 @@ import umm3601.Controller;
 public class WordController implements Controller {
 
     private static final String API_WORDS = "/api/anagram";
-    // private static final String API_WORD_BY_ID = "/api/anagram/{id}";
+    private static final String API_WORD_BY_ID = "/api/anagram/{id}";
     static final String WORD_KEY = "word";
     static final String WORD_GROUP_KEY = "wordGroup";
     static final String SORT_ORDER_KEY = "sortOrder";
@@ -106,7 +106,7 @@ private Bson constructSortingOrder(Context ctx) {
 }
 
 
-public void addNewWord(Context ctx) {
+  public void addNewWord(Context ctx) {
 
     String body = ctx.body();
     Word newWord = ctx.bodyValidator(Word.class)
@@ -121,9 +121,9 @@ public void addNewWord(Context ctx) {
     wordCollection.insertOne(newWord);
     ctx.json(Map.of("id", newWord._id));
     ctx.status(HttpStatus.CREATED);
-}
+  }
 
-public void deleteWord(Context ctx) {
+  public void deleteWord(Context ctx) {
     String id = ctx.pathParam("id");
     DeleteResult deleteResult = wordCollection.deleteOne(eq("_id", new ObjectId(id)));
 
@@ -135,7 +135,7 @@ public void deleteWord(Context ctx) {
             + "; perhaps illegal ID or an ID for item not in the system?");
         }
         ctx.status(HttpStatus.OK);
-    }
+  }
 
   //   public void addListWords(Context ctx) {
   //       List<Word> newWords = ctx.bodyValidator(List.class)
@@ -198,7 +198,7 @@ public void deleteWord(Context ctx) {
 
     server.get(API_WORDS, this::getWords);
 
-    // server.delete(API_WORD_BY_ID, this::deleteWord);
+    server.delete(API_WORD_BY_ID, this::deleteWord); //used to be API_WORD_BY_ID
 
     server.post(API_WORDS, this::addNewWord);
 

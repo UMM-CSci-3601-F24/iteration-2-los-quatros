@@ -47,4 +47,9 @@ export class WordService {
   addWord(newWord: Partial<Word>): Observable<string> {
     return this.httpClient.post<{id: string}>(this.wordUrl, newWord).pipe(map(response => response.id))
   }
+
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  deleteWord(id: string): Observable<void> {
+    return this.httpClient.delete<void>(`${this.wordUrl}/${id}`);
+  }
 }
