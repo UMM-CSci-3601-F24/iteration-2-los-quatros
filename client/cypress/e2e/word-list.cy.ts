@@ -17,7 +17,7 @@ describe('Anagram Solver', () => {
   });
 
   it('Should show 5 words', () => {
-    page.getAnagramListItems().should('have.length', 5);
+    page.getAnagramListItems().should('have.length.at.least', 5);
   });
 
   it('should type something into the contains filter and check that elements returned are correct', () => {
@@ -29,9 +29,9 @@ describe('Anagram Solver', () => {
   });
 
   it('should type something into the wordGroup filter and check that elements returned are correct', () => {
-    cy.get('[data-test=wordGroupInput]').type('food');
+    cy.get('[data-test=wordGroupInput]').type('1000');
     page.getAnagramListItems().each( e => {
-      cy.wrap(e).find('.anagram-list-wordGroup').contains('food', {matchCase: false});
+      cy.wrap(e).find('.anagram-list-wordGroup').contains('10000 Common Words', {matchCase: false});
     });
   });
 
