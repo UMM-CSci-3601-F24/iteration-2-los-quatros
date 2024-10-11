@@ -10,8 +10,8 @@ import { HttpClient, HttpParams } from '@angular/common/http';
 export class WordService {
   readonly wordUrl: string = `${environment.apiUrl}anagram`;
 
-  private readonly groupKey = 'group';
-  private readonly containsKey = 'contains';
+  private readonly groupKey = 'wordGroup';//'group';
+  private readonly containsKey = 'word';//'contains';
 
 
   constructor(private httpClient: HttpClient) { }
@@ -37,7 +37,7 @@ export class WordService {
 
     if(filters.sortType) {
       if(filters.sortType === "alphabetical"){
-        filteredWords.sort();
+        filteredWords.map(w => w.word).sort();
       }
     }
     if(filters.sortOrder) {
@@ -54,7 +54,8 @@ export class WordService {
     return this.httpClient.delete<void>(`${this.wordUrl}/${id}`);
   }
 
-  deleteWordGroup(group: string): Observable<void> {
-    return this.httpClient.delete<void>(`${this.wordUrl}/${group}`);
+  deleteWordGroup(wordGroup: string): Observable<void> {
+    console.log(`delete word group was called with param : ${wordGroup}`)
+    return this.httpClient.delete<void>(`${this.wordUrl}/${wordGroup}`);
   }
 }

@@ -109,5 +109,10 @@ export class WordListComponent {
     this.wordService.deleteWordGroup(group).subscribe(() => {
       this.snackBar.open(`We deleted a word group!`, 'OK', {duration: 6000});
     })
+    // if(group.length >= 1) {
+
+    // } else {
+    //   this.snackBar.open('Failed to delete word group', 'OK', {duration: 6000});
+    // }
   }
 }

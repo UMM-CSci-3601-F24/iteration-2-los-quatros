@@ -29,7 +29,7 @@ import io.javalin.http.NotFoundResponse;
 // import kotlin.collections.builders.ListBuilder;
 import umm3601.Controller;
 
-@SuppressWarnings("unchecked")
+
 
 public class WordController implements Controller {
 
@@ -100,8 +100,8 @@ public class WordController implements Controller {
     }
 
 private Bson constructSortingOrder(Context ctx) {
-    String sortBy = Objects.requireNonNullElse(ctx.queryParam("sortby"), "word");
-    String sortOrder = Objects.requireNonNullElse(ctx.queryParam("sortOrder"), "asc");
+    String sortBy = Objects.requireNonNullElse(ctx.queryParam("sortType"), "alphabetical");
+    String sortOrder = Objects.requireNonNullElse(ctx.queryParam("sortOrder"), "false");
     Bson sortingOrder = sortOrder.equals("desc") ?  Sorts.descending(sortBy) : Sorts.ascending(sortBy);
     return sortingOrder;
 }

@@ -16,20 +16,24 @@ describe('Anagram Solver', () => {
     page.getAnagramTitle().should('have.text', 'Anagram Generator');
   });
 
-  // it('should type something into the contains filter and check that elements returned are correct', () => {
-  //   cy.get('[data-test=wordContainsInput]').type('ac');
-  //   page.getAnagramListItems().each( e => {
-  //     cy.wrap(e).find('.anagram-list-word').should('include.text', 'a');
-  //     cy.wrap(e).find('.anagram-list-word').should('include.text', 'c');
-  //   });
-  // });
+  it('Should show 5 words', () => {
+    page.getAnagramListItems().should('have.length', 5);
+  });
 
-  // it('should type something into the wordGroup filter and check that elements returned are correct', () => {
-  //   cy.get('[data-test=wordGroupInput]').type('food');
-  //   page.getAnagramListItems().each( e => {
-  //     cy.wrap(e).find('.anagram-list-wordGroup').should('contain', 'food');
-  //   });
-  // });
+  it('should type something into the contains filter and check that elements returned are correct', () => {
+    cy.get('[data-test=wordContainsInput]').type('ca');
+    page.getAnagramListItems().each( e => {
+      cy.wrap(e).find('.anagram-list-word').should('include.text', 'a');
+      cy.wrap(e).find('.anagram-list-word').should('include.text', 'c');
+    });
+  });
+
+  it('should type something into the wordGroup filter and check that elements returned are correct', () => {
+    cy.get('[data-test=wordGroupInput]').type('food');
+    page.getAnagramListItems().each( e => {
+      cy.wrap(e).find('.anagram-list-wordGroup').contains('food', {matchCase: false});
+    });
+  });
 
   // sorting not implemented yet
   // it('should click sort alphabetical and increasing and check that elements returned are correct', () => {
@@ -53,5 +57,16 @@ describe('Anagram Solver', () => {
     page.addWordButton().click();
     cy.url().should(url => expect(url.endsWith('/anagram/new')).to.be.true);
     cy.get('.add-word-title').should('have.text', 'New Word Group');
+  });
+
+  it('should delete single word and return matSnackBar', () => {
+    cy.get('[data-test=deleteWordButton]').first().click();
+    page.getSnackBar().contains('word', { matchCase: false });
+  });
+
+  it('should delete word Group and return matSnackBar', () => {
+    cy.get('[data-test=wordGroupInput]').type("Food");
+    cy.get('[data-test=deleteWordGroupButton]').click();
+    page.getSnackBar().contains('word group', { matchCase: false });
   });
 });
