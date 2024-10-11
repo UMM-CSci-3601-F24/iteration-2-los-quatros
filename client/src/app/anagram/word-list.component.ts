@@ -62,10 +62,10 @@ export class WordListComponent {
   serverFilteredWords =
     toSignal(
       combineLatest([this.contains$, this.group$]).pipe(
-        switchMap(([contains, group]) =>
+        switchMap(([word, wordGroup]) =>
           this.wordService.getWords({
-            contains,
-            group,
+            word,
+            wordGroup,
           })
         ),
         catchError((err) => {

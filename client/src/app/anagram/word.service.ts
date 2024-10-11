@@ -16,15 +16,15 @@ export class WordService {
 
   constructor(private httpClient: HttpClient) { }
 
-  getWords(filters?: {contains?: string; group?: string}): Observable<Word[]> {
+  getWords(filters?: {word?: string; wordGroup?: string}): Observable<Word[]> {
 
     let httpParams: HttpParams = new HttpParams();
     if(filters) {
-      if(filters.contains) {
-        httpParams = httpParams.set(this.containsKey, filters.contains);
+      if(filters.word) {
+        httpParams = httpParams.set(this.containsKey, filters.word);
       }
-      if(filters.group) {
-        httpParams = httpParams.set(this.groupKey, filters.group);
+      if(filters.wordGroup) {
+        httpParams = httpParams.set(this.groupKey, filters.wordGroup);
       }
     }
     return this.httpClient.get<Word[]>(this.wordUrl, {

@@ -67,7 +67,7 @@ describe('WordService', () => {
     it('correctly calls api/anagram with  filter parameter contains', () => {
       const mockedMethod = spyOn(httpClient, 'get').and.returnValue(of(testWords));
 
-      wordService.getWords({contains: 'c'}).subscribe(() => {
+      wordService.getWords({word: 'c'}).subscribe(() => {
         expect(mockedMethod)
           .withContext('one call')
           .toHaveBeenCalledTimes(1);
@@ -79,7 +79,7 @@ describe('WordService', () => {
     it('correctly calls api/anagram with filter parameter group', () => {
       const mockedMethod = spyOn(httpClient, 'get').and.returnValue(of(testWords));
 
-      wordService.getWords({group: 'teach'}).subscribe(() => {
+      wordService.getWords({wordGroup: 'teach'}).subscribe(() => {
         expect(mockedMethod)
           .withContext('one call')
           .toHaveBeenCalledTimes(1);
@@ -91,7 +91,7 @@ describe('WordService', () => {
     it('correctly calls api/anagram with more than one filter parameters', () => {
       const mockedMethod = spyOn(httpClient, 'get').and.returnValue(of(testWords));
 
-      wordService.getWords({contains: 'l', group: 'mem'}).subscribe(() => {
+      wordService.getWords({word: 'l', wordGroup: 'mem'}).subscribe(() => {
         const [url, options] = mockedMethod.calls.argsFor(0);
         const calledHttpParams: HttpParams = (options.params) as HttpParams;
 
