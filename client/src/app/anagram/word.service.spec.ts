@@ -73,7 +73,7 @@ describe('WordService', () => {
           .toHaveBeenCalledTimes(1);
         expect(mockedMethod)
           .withContext('talks to correct endpoint')
-          .toHaveBeenCalledWith(wordService.wordUrl, {params: new HttpParams().set('contains', 'c')});
+          .toHaveBeenCalledWith(wordService.wordUrl, {params: new HttpParams().set('word', 'c')});
       });
     });
     it('correctly calls api/anagram with filter parameter group', () => {
@@ -85,7 +85,7 @@ describe('WordService', () => {
           .toHaveBeenCalledTimes(1);
         expect(mockedMethod)
           .withContext('talks to correct endpoint')
-          .toHaveBeenCalledWith(wordService.wordUrl, {params: new HttpParams().set('group', 'teach')});
+          .toHaveBeenCalledWith(wordService.wordUrl, {params: new HttpParams().set('wordGroup', 'teach')});
       });
     });
     it('correctly calls api/anagram with more than one filter parameters', () => {
@@ -103,10 +103,10 @@ describe('WordService', () => {
           .toEqual(wordService.wordUrl);
         expect(calledHttpParams.keys().length)
           .toBe(2);
-        expect(calledHttpParams.get('contains'))
+        expect(calledHttpParams.get('word'))
           .withContext('contains `l`')
           .toEqual('l');
-        expect(calledHttpParams.get('group'))
+        expect(calledHttpParams.get('wordGroup'))
           .withContext(' from wordGroup mem')
           .toEqual('mem');
       });

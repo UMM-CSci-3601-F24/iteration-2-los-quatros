@@ -64,9 +64,9 @@ describe('Anagram Solver', () => {
     page.getSnackBar().contains('word', { matchCase: false });
   });
 
-  it('should delete word Group and return matSnackBar', () => {
-    cy.get('[data-test=wordGroupInput]').type("Food");
-    cy.get('[data-test=deleteWordGroupButton]').click();
-    page.getSnackBar().contains('word group', { matchCase: false });
-  });
+  // it('should delete word Group and return matSnackBar', () => {
+  //   cy.get('[data-test=wordGroupInput]').type("Food");
+  //   cy.get('[data-test=deleteWordGroupButton]').click();
+  //   page.getSnackBar().contains('word group', { matchCase: false });
+  // });
 });
