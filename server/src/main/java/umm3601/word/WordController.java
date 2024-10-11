@@ -29,12 +29,13 @@ import io.javalin.http.NotFoundResponse;
 // import kotlin.collections.builders.ListBuilder;
 import umm3601.Controller;
 
-@SuppressWarnings("unchecked")
+
 
 public class WordController implements Controller {
 
     private static final String API_WORDS = "/api/anagram";
     private static final String API_WORD_BY_ID = "/api/anagram/{id}";
+    private static final String API_WORDS_BY_WORDGROUP = "/api/anagram/{wordGroup}";
     static final String WORD_KEY = "word";
     static final String WORD_GROUP_KEY = "wordGroup";
     static final String SORT_ORDER_KEY = "sortOrder";
@@ -99,8 +100,8 @@ public class WordController implements Controller {
     }
 
 private Bson constructSortingOrder(Context ctx) {
-    String sortBy = Objects.requireNonNullElse(ctx.queryParam("sortby"), "word");
-    String sortOrder = Objects.requireNonNullElse(ctx.queryParam("sortOrder"), "asc");
+    String sortBy = Objects.requireNonNullElse(ctx.queryParam("sortType"), "alphabetical");
+    String sortOrder = Objects.requireNonNullElse(ctx.queryParam("sortOrder"), "false");
     Bson sortingOrder = sortOrder.equals("desc") ?  Sorts.descending(sortBy) : Sorts.ascending(sortBy);
     return sortingOrder;
 }
@@ -165,7 +166,7 @@ private Bson constructSortingOrder(Context ctx) {
 
     // server.post(API_WORDS, this::addListWords);
 
-    // server.delete(API_WORDS_BY_WORDGROUP, this::deleteListWords);
+    server.delete(API_WORDS_BY_WORDGROUP, this::deleteListWords);
   }
 }
 

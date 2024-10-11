@@ -62,10 +62,10 @@ export class WordListComponent {
   serverFilteredWords =
     toSignal(
       combineLatest([this.contains$, this.group$]).pipe(
-        switchMap(([contains, group]) =>
+        switchMap(([word, wordGroup]) =>
           this.wordService.getWords({
-            contains,
-            group,
+            word,
+            wordGroup,
           })
         ),
         catchError((err) => {
@@ -103,5 +103,16 @@ export class WordListComponent {
       // this.sortType.set(tempSortType.toString());
       this.snackBar.open(`We deleted a word!`, 'OK', {duration: 6000});
     })
+  }
+
+  deleteWordGroup(group: string) {
+    this.wordService.deleteWordGroup(group).subscribe(() => {
+      this.snackBar.open(`We deleted a word group!`, 'OK', {duration: 6000});
+    })
+    // if(group.length >= 1) {
+
+    // } else {
+    //   this.snackBar.open('Failed to delete word group', 'OK', {duration: 6000});
+    // }
   }
 }

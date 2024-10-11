@@ -18,6 +18,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 // import java.util.stream.Collectors;
+import java.util.stream.Collectors;
 
 import org.bson.Document;
 import org.bson.types.ObjectId;
@@ -51,40 +52,40 @@ import io.javalin.validation.Validator;
 
 @SuppressWarnings({ "MagicNumber" })
 class WordControllerSpec {
-    private WordController wordController;
-    private ObjectId wordId;
-    private static MongoClient mongoClient;
-    private static MongoDatabase db;
-    private static JavalinJackson javalinJackson = new JavalinJackson();
+  private WordController wordController;
+  private ObjectId wordId;
+  private static MongoClient mongoClient;
+  private static MongoDatabase db;
+  private static JavalinJackson javalinJackson = new JavalinJackson();
 
-    @Mock
-    private Context ctx;
+  @Mock
+  private Context ctx;
 
-    @Captor
-    private ArgumentCaptor<ArrayList<Word>> wordArrayListCaptor;
+  @Captor
+  private ArgumentCaptor<ArrayList<Word>> wordArrayListCaptor;
 
-    @Captor
-    private ArgumentCaptor<Word> wordCaptor;
+  @Captor
+  private ArgumentCaptor<Word> wordCaptor;
 
-    @Captor
-    private ArgumentCaptor<Map<String, String>> mapCaptor;
+  @Captor
+  private ArgumentCaptor<Map<String, String>> mapCaptor;
 
-    @BeforeAll
-    static void setupAll() {
-        String mongoAddr = System.getenv().getOrDefault("MONGO_ADDR", "localhost");
+  @BeforeAll
+  static void setupAll() {
+      String mongoAddr = System.getenv().getOrDefault("MONGO_ADDR", "localhost");
 
-        mongoClient = MongoClients.create(
-            MongoClientSettings.builder().applyToClusterSettings(builder ->
-              builder.hosts(Arrays.asList(new ServerAddress(mongoAddr)))).build());
+      mongoClient = MongoClients.create(
+        MongoClientSettings.builder().applyToClusterSettings(builder ->
+          builder.hosts(Arrays.asList(new ServerAddress(mongoAddr)))).build());
 
-            db = mongoClient.getDatabase("test");
-    }
+          db = mongoClient.getDatabase("test");
+  }
 
-    @AfterAll
-    static void teardown() {
-        db.drop();
-        mongoClient.close();
-    }
+  @AfterAll
+  static void teardown() {
+    db.drop();
+    mongoClient.close();
+  }
 
     @BeforeEach
     void setupEach() throws IOException {
@@ -129,17 +130,17 @@ class WordControllerSpec {
         wordController = new WordController(db);
     }
 
-    @Test
-    public void canBuildController() throws IOException {
-        Javalin mockServer = Mockito.mock(Javalin.class);
-        wordController.addRoutes(mockServer);
-        //used to be :
-        // verify(mockServer, Mockito.atLeast(2)).get(any(), any());
-        //changed because only have one get function for wordController, reinstate if reinstate get words by group
-        verify(mockServer, Mockito.atLeastOnce()).get(any(), any());
-        verify(mockServer, Mockito.atLeastOnce()).post(any(), any());
-        verify(mockServer, Mockito.atLeastOnce()).delete(any(), any());
-    }
+  @Test
+  public void canBuildController() throws IOException {
+      Javalin mockServer = Mockito.mock(Javalin.class);
+      wordController.addRoutes(mockServer);
+      //used to be :
+      // verify(mockServer, Mockito.atLeast(2)).get(any(), any());
+      //changed because only have one get function for wordController, reinstate if reinstate get words by group
+      verify(mockServer, Mockito.atLeastOnce()).get(any(), any());
+      verify(mockServer, Mockito.atLeastOnce()).post(any(), any());
+      verify(mockServer, Mockito.atLeastOnce()).delete(any(), any());
+  }
 
     @Test
     void canGetAllWords() throws IOException {
@@ -150,39 +151,38 @@ class WordControllerSpec {
         assertEquals(db.getCollection("words").countDocuments(), wordArrayListCaptor.getValue().size());
     }
 
-    // @Test
-    // void canGetTodosWithWordGroupBrainRot() throws IOException {
-    //     String targetWordGroup = "brainrot";
-    //     Map<String, List<String>> queryParams = new HashMap<>();
+  @Test
+  void canGetTodosWithWordGroupBrainRot() throws IOException {
+    String targetWordGroup = "brainrot";
+    Map<String, List<String>> queryParams = new HashMap<>();
 
-    //     queryParams.put(WordController.WORD_GROUP_KEY, Arrays.asList(new String[] {targetWordGroup}));
-    //     when(ctx.queryParamMap()).thenReturn(queryParams);
-    //     when(ctx.queryParam(WordController.WORD_GROUP_KEY)).thenReturn(targetWordGroup);
+    queryParams.put(WordController.WORD_GROUP_KEY, Arrays.asList(new String[] {targetWordGroup}));
+    when(ctx.queryParamMap()).thenReturn(queryParams);
+    when(ctx.queryParam(WordController.WORD_GROUP_KEY)).thenReturn(targetWordGroup);
 
-    //     Validation validation = new Validation();
-    // Validator<String> validator = validation.validator(WordController.WORD_GROUP_KEY, String.class, targetWordGroup);
+    Validation validation = new Validation();
+    Validator<String> validator = validation.validator(WordController.WORD_GROUP_KEY, String.class, targetWordGroup);
 
-    //     when(ctx.queryParamAsClass(WordController.WORD_GROUP_KEY, String.class)).thenReturn(validator);
+    when(ctx.queryParamAsClass(WordController.WORD_GROUP_KEY, String.class)).thenReturn(validator);
 
-    //     wordController.getWords(ctx);
+    wordController.getWords(ctx);
 
-    //     verify(ctx).json(wordArrayListCaptor.capture());
-    //     verify(ctx).status(HttpStatus.OK);
+    verify(ctx).json(wordArrayListCaptor.capture());
+    verify(ctx).status(HttpStatus.OK);
 
-    //     assertEquals(3, wordArrayListCaptor.getValue().size());
+    assertEquals(3, wordArrayListCaptor.getValue().size());
 
-    //     for (Word word : wordArrayListCaptor.getValue()) {
-    //         assertEquals(targetWordGroup, word.wordGroup);
-    //     }
+    for (Word word : wordArrayListCaptor.getValue()) {
+      assertEquals(targetWordGroup, word.wordGroup);
+    }
 
-    //     List<String> words = wordArrayListCaptor.getValue().stream()
-    //       .map(word -> word.word).collect(Collectors.toList());
-    //     assertTrue(words.contains("skibbidy"));
-    //     assertTrue(words.contains("sigma"));
-    //     assertTrue(words.contains("cooked"));
-    // }
+    List<String> words = wordArrayListCaptor.getValue().stream().map(word -> word.word).collect(Collectors.toList());
+    assertTrue(words.contains("skibbidy"));
+    assertTrue(words.contains("sigma"));
+    assertTrue(words.contains("cooked"));
+  }
 
-    @Test
+  @Test
     void canGetWord() throws IOException {
         String targetWord = "playstation";
 

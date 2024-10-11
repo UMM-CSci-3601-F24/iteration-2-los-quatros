@@ -41,7 +41,7 @@ export class MockWordService extends WordService {
   }
 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  getWords(_filters: {contains?: string; group?: string}): Observable<Word[]> {
+  getWords(_filters: {word?: string; wordGroup?: string}): Observable<Word[]> {
     return of(MockWordService.testWords);
   }
 }

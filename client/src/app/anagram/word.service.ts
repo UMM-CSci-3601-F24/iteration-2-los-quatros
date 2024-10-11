@@ -10,21 +10,21 @@ import { HttpClient, HttpParams } from '@angular/common/http';
 export class WordService {
   readonly wordUrl: string = `${environment.apiUrl}anagram`;
 
-  private readonly groupKey = 'group';
-  private readonly containsKey = 'contains';
+  private readonly groupKey = 'wordGroup';//'group';
+  private readonly containsKey = 'word';//'contains';
 
 
   constructor(private httpClient: HttpClient) { }
 
-  getWords(filters?: {contains?: string; group?: string}): Observable<Word[]> {
+  getWords(filters?: {word?: string; wordGroup?: string}): Observable<Word[]> {
 
     let httpParams: HttpParams = new HttpParams();
     if(filters) {
-      if(filters.contains) {
-        httpParams = httpParams.set(this.containsKey, filters.contains);
+      if(filters.word) {
+        httpParams = httpParams.set(this.containsKey, filters.word);
       }
-      if(filters.group) {
-        httpParams = httpParams.set(this.groupKey, filters.group);
+      if(filters.wordGroup) {
+        httpParams = httpParams.set(this.groupKey, filters.wordGroup);
       }
     }
     return this.httpClient.get<Word[]>(this.wordUrl, {
@@ -37,7 +37,7 @@ export class WordService {
 
     if(filters.sortType) {
       if(filters.sortType === "alphabetical"){
-        filteredWords.sort();
+        filteredWords.map(w => w.word).sort();
       }
     }
     if(filters.sortOrder) {
@@ -52,5 +52,10 @@ export class WordService {
 
   deleteWord(id: string): Observable<void> {
     return this.httpClient.delete<void>(`${this.wordUrl}/${id}`);
+  }
+
+  deleteWordGroup(wordGroup: string): Observable<void> {
+    console.log(`delete word group was called with param : ${wordGroup}`)
+    return this.httpClient.delete<void>(`${this.wordUrl}/${wordGroup}`);
   }
 }

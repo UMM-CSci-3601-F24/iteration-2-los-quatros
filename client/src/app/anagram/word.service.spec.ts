@@ -67,31 +67,31 @@ describe('WordService', () => {
     it('correctly calls api/anagram with  filter parameter contains', () => {
       const mockedMethod = spyOn(httpClient, 'get').and.returnValue(of(testWords));
 
-      wordService.getWords({contains: 'c'}).subscribe(() => {
+      wordService.getWords({word: 'c'}).subscribe(() => {
         expect(mockedMethod)
           .withContext('one call')
           .toHaveBeenCalledTimes(1);
         expect(mockedMethod)
           .withContext('talks to correct endpoint')
-          .toHaveBeenCalledWith(wordService.wordUrl, {params: new HttpParams().set('contains', 'c')});
+          .toHaveBeenCalledWith(wordService.wordUrl, {params: new HttpParams().set('word', 'c')});
       });
     });
     it('correctly calls api/anagram with filter parameter group', () => {
       const mockedMethod = spyOn(httpClient, 'get').and.returnValue(of(testWords));
 
-      wordService.getWords({group: 'teach'}).subscribe(() => {
+      wordService.getWords({wordGroup: 'teach'}).subscribe(() => {
         expect(mockedMethod)
           .withContext('one call')
           .toHaveBeenCalledTimes(1);
         expect(mockedMethod)
           .withContext('talks to correct endpoint')
-          .toHaveBeenCalledWith(wordService.wordUrl, {params: new HttpParams().set('group', 'teach')});
+          .toHaveBeenCalledWith(wordService.wordUrl, {params: new HttpParams().set('wordGroup', 'teach')});
       });
     });
     it('correctly calls api/anagram with more than one filter parameters', () => {
       const mockedMethod = spyOn(httpClient, 'get').and.returnValue(of(testWords));
 
-      wordService.getWords({contains: 'l', group: 'mem'}).subscribe(() => {
+      wordService.getWords({word: 'l', wordGroup: 'mem'}).subscribe(() => {
         const [url, options] = mockedMethod.calls.argsFor(0);
         const calledHttpParams: HttpParams = (options.params) as HttpParams;
 
@@ -103,10 +103,10 @@ describe('WordService', () => {
           .toEqual(wordService.wordUrl);
         expect(calledHttpParams.keys().length)
           .toBe(2);
-        expect(calledHttpParams.get('contains'))
+        expect(calledHttpParams.get('word'))
           .withContext('contains `l`')
           .toEqual('l');
-        expect(calledHttpParams.get('group'))
+        expect(calledHttpParams.get('wordGroup'))
           .withContext(' from wordGroup mem')
           .toEqual('mem');
       });
