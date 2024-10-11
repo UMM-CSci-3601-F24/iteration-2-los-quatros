@@ -52,7 +52,7 @@
       <mat-card>
         <mat-card-content>
           <mat-nav-list class="anagram-nav-list">
-            @for (word of filteredWords(); track word._id) {
+            @for (word of filteredWords().slice(0,100); track word._id) {
               <div class="flex-row gap-8 flex-wrap anagram-list-item">
                 <span matListItemTitle matListItemTitle class="anagram-list-word">{{word.word}}</span>
                 <span matListItemTitle matListItemLine class="anagram-list-wordGroup">{{word.wordGroup}}</span>
@@ -62,6 +62,9 @@
                 </button>
                 <br>
               </div>
+            }
+            @if(filteredWords().length > 100) {
+              <p>Showing first 100 words, Please increase search parameters</p>
             }
           </mat-nav-list>
         </mat-card-content>
