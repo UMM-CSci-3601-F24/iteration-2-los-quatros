@@ -129,6 +129,9 @@ private Bson constructSortingOrder(Context ctx) {
     // String body = ctx.body();
     // Word newWords = ctx.bodyValidator(Word.class)
 
+    // the idea is to make the text disappear after each enter key and add it to a list of words with
+    // one word group and then we can make all of those unique words.
+
   }
 
   public void deleteWord(Context ctx) {
