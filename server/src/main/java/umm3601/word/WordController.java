@@ -122,6 +122,13 @@ private Bson constructSortingOrder(Context ctx) {
     wordCollection.insertOne(newWord);
     ctx.json(Map.of("id", newWord._id));
     ctx.status(HttpStatus.CREATED);
+
+  }
+
+  public void addMultipleWords(Context ctx) {
+    // String body = ctx.body();
+    // Word newWords = ctx.bodyValidator(Word.class)
+
   }
 
   public void deleteWord(Context ctx) {
@@ -168,6 +175,8 @@ private Bson constructSortingOrder(Context ctx) {
 
     server.delete(API_WORDS_BY_WORDGROUP, this::deleteListWords);
   }
+
+
 }
 
 
