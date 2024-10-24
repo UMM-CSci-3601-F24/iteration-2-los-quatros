@@ -131,7 +131,19 @@ private Bson constructSortingOrder(Context ctx) {
 
     // the idea is to make the text disappear after each enter key and add it to a list of words with
     // one word group and then we can make all of those unique words.
+    String body = ctx.body();
+    Word newWord = ctx.bodyValidator(Word.class)
+    .check(td -> td.word != null && td.word.length() > 0,
+        "New words must be non-empty; New words was " + body)
+    .check(td -> td.wordGroup != null && td.wordGroup.length() > 0,
+        "Word Group must be non-empty; Group was " + body)
+    // .check(td -> td.body != null && td.body.length() > 0,
+    //     "Todo must have a non-empty body; body was " + body)
+    .get();
 
+    wordCollection.insertOne(newWord);
+    ctx.json(Map.of("id", newWord._id));
+    ctx.status(HttpStatus.CREATED);
   }
 
   public void deleteWord(Context ctx) {
@@ -168,11 +180,14 @@ private Bson constructSortingOrder(Context ctx) {
   public void addRoutes(Javalin server) {
     // server.get(API_WORD_BY_ID, this::getWord);
 
+
+
     server.get(API_WORDS, this::getWords);
 
     server.delete(API_WORD_BY_ID, this::deleteWord); //used to be API_WORD_BY_ID
 
     server.post(API_WORDS, this::addNewWord);
+    server.post(API_WORDS, this::addMultipleWords);
 
     // server.post(API_WORDS, this::addListWords);
 

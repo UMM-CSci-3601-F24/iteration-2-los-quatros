@@ -25,9 +25,9 @@
           </p>
           <mat-form-field>
             <mat-label>New Words</mat-label>
-            <input matInput formControlName="words" required>
-            @if (formControlHasError('words')) {
-              <mat-error data-test="wordsError">
+            <input matInput formControlName="word" required>
+            @if (formControlHasError('word')) {
+              <mat-error data-test="wordError">
                 {{getErrorMessage('word')}}
               </mat-error>
             }

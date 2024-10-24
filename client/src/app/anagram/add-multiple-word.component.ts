@@ -40,7 +40,7 @@ export class AddMultipleWordComponent {
   // }
 
   addMultipleWordForm = new FormGroup({
-    words: new FormControl('', Validators.compose([
+    word: new FormControl('', Validators.compose([
       Validators.required,
       Validators.minLength(1)
     ])),
@@ -81,7 +81,7 @@ export class AddMultipleWordComponent {
   }
 
   submitForm() {
-    this.wordService.addWord(this.addMultipleWordForm.value).subscribe({
+    this.wordService.addMultipleWord(this.addMultipleWordForm.value).subscribe({
       next: () => {
         this.snackBar.open(
           `Added word group: ${this.addMultipleWordForm.value.wordGroup}`,
@@ -93,7 +93,8 @@ export class AddMultipleWordComponent {
       error: err => {
         if (err.status === 400) {
           this.snackBar.open(
-            `The server failed to process your request to add a new word group. Is the server up? – Error Code: ${err.status}\nMessage: ${err.message}`,
+            `The server failed to process your request to add a new word group. Is the server up? – Error
+            Code: ${err.status}\nMessage: ${err.message}`,
               'OK',
               { duration: 5000 }
           );
