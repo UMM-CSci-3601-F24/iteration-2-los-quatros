@@ -23,6 +23,8 @@ import { Router } from '@angular/router';
 })
 export class AddMultipleWordComponent {
 
+
+
   // const input = document.getElementById('wordInput') as HTMLInputElement;
   // const wordListDiv = document.getElementById('wordList') as HTMLDivElement;
   // input.addEventListener('Keydown', (event: KeyboardEvent) =>{
@@ -80,6 +82,8 @@ export class AddMultipleWordComponent {
     return 'Unknown error';
   }
 
+
+
   submitForm() {
     this.wordService.addMultipleWord(this.addMultipleWordForm.value).subscribe({
       next: () => {
@@ -108,6 +112,8 @@ export class AddMultipleWordComponent {
       },
     });
   }
+
+
 
 }
 

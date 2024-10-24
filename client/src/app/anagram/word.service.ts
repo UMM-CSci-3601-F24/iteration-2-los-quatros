@@ -10,6 +10,8 @@ import { HttpClient, HttpParams } from '@angular/common/http';
 export class WordService {
   readonly wordUrl: string = `${environment.apiUrl}anagram`;
 
+  readonly wordsUrl: string = `${environment.apiUrl}anagram/multiple`
+
   private readonly groupKey = 'wordGroup';//'group';
   private readonly containsKey = 'word';//'contains';
 
