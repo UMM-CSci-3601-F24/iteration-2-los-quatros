@@ -1,6 +1,16 @@
 import { ComponentFixture, TestBed, fakeAsync, tick } from '@angular/core/testing';
 import { FormsModule } from '@angular/forms';
 import { GridComponent } from './grid.component';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatInputModule } from '@angular/material/input';
+import { GridCellComponent } from '../grid-cell/grid-cell.component';
+import { CommonModule } from '@angular/common';
+import { MatGridListModule } from '@angular/material/grid-list';
+import { MatExpansionModule } from '@angular/material/expansion';
+import { MatIconModule } from '@angular/material/icon';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { BrowserModule } from '@angular/platform-browser';
+import { AppRoutingModule } from '../app-routing.module';
 
 describe('GridCellComponent', () => {
   let component: GridComponent;
@@ -9,7 +19,19 @@ describe('GridCellComponent', () => {
   beforeEach(async () => {
     await TestBed.configureTestingModule({
       declarations: [],
-      imports: [FormsModule, GridComponent]
+      imports: [MatFormFieldModule,
+        MatInputModule,
+        FormsModule,
+        CommonModule,
+        GridCellComponent,
+        MatGridListModule,
+        MatExpansionModule,
+        MatIconModule,
+        GridComponent,
+        BrowserModule,
+        BrowserAnimationsModule,
+        AppRoutingModule,
+      ]
     })
     .compileComponents();
 
