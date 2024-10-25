@@ -85,8 +85,11 @@ public class WordController implements Controller {
         List<Bson> filters = new ArrayList<>();
 
         if (ctx.queryParamMap().containsKey(WORD_KEY)) {
-          Pattern pattern = Pattern.compile(Pattern.quote(ctx.queryParam(WORD_KEY)), Pattern.CASE_INSENSITIVE);
-          filters.add(regex(WORD_KEY, pattern));
+        //   Pattern pattern = Pattern.compile(Pattern.quote(ctx.queryParam(WORD_KEY)), Pattern.CASE_INSENSITIVE);
+        //   filters.add(regex(WORD_KEY, pattern));
+
+            for (char c: WORD_KEY.toCharArray())
+            filters.add(regex(WORD_KEY.toCharArray().toString().substring(1), WORD_KEY));
         }
 
         if (ctx.queryParamMap().containsKey(WORD_GROUP_KEY)) {
