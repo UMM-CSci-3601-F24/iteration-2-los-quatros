@@ -7,6 +7,7 @@ import { MatInputModule } from '@angular/material/input';
 import { WordService } from './word.service';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { Router } from '@angular/router';
+// import { emitKeypressEvents } from 'readline';
 
 @Component({
   selector: 'app-add-multiple-word',
@@ -92,7 +93,9 @@ export class AddMultipleWordComponent {
           null,
           {duration: 2000}
         );
-        this.router.navigate(['/anagram']);
+        const wordGroup = this.addMultipleWordForm.value;
+        wordGroup.word = '';
+        this.addMultipleWordForm.setValue(wordGroup as { word: string, wordGroup: string });
       },
       error: err => {
         if (err.status === 400) {
@@ -113,8 +116,23 @@ export class AddMultipleWordComponent {
     });
   }
 
+  //  enterPress() {
 
+  //   addEventListener("keydown", (event) => {});
+  //   onkeydown = (event) => {}
+  //   // (keydown = (event)) {
+
+  //   function enterKey(enter){
+
+  //   }
+  //    this.myControl = new FormControl('');
+
+  //    // this.myControl.reset();
+
+  //     }
 
 }
+
+
 
 

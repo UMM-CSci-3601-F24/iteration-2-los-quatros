@@ -9,7 +9,7 @@
         <div class="flex-col">
           <mat-form-field>
             <mat-label>Word Group Name</mat-label>
-            <input matInput formControlName="wordGroup" required>
+            <input matInput formControlName="wordGroup" required />
             @if(formControlHasError('wordGroup')) {
               <mat-error data-test="wordGroupError">
                 {{getErrorMessage('wordGroup')}}
@@ -25,7 +25,7 @@
           </p>
           <mat-form-field>
             <mat-label>New Words</mat-label>
-            <input class="wordInput" matInput formControlName="word" required onkeypress="clickPress(event)">
+            <input class="wordInput" matInput formControlName="word"  type="text" required <!-- onkeypress="enterPress(event)" -->>
             @if (formControlHasError('word')) {
               <mat-error data-test="wordError">
                 {{getErrorMessage('word')}}
@@ -34,16 +34,6 @@
           </mat-form-field>
         </div>
       </mat-card-content>
-
-        <script>
-      function clickPress(event) {
-       if (event.key == "Enter") {
-        event.preventDefault();
-       document.getElementById("word").innerHTML = "You submitted a word."
-         }
-      }
-      </script>
-
       <mat-card-actions align="end">
         <button
           mat-button

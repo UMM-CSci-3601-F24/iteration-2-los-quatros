@@ -187,7 +187,7 @@ private Bson constructSortingOrder(Context ctx) {
     server.delete(API_WORD_BY_ID, this::deleteWord); //used to be API_WORD_BY_ID
 
     server.post(API_WORDS, this::addNewWord);
-    server.post(API_WORDS, this::addMultipleWords);
+    // server.post(API_WORDS, this::addMultipleWords);
 
     // server.post(API_WORDS, this::addListWords);
 
