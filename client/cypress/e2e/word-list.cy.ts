@@ -48,7 +48,7 @@ describe('Anagram Solver', () => {
   //     expect(lastLetter).to.not.be.at.most(tempLetter);
   //     lastLetter = tempLetter;
   //   });
-  // });
+  // });page.deleteWordButton().click();
 
   // it('should click sort alphabetical and decreasing and check that elements returned are correct', () => {
   // });
@@ -69,4 +69,9 @@ describe('Anagram Solver', () => {
   //   cy.get('[data-test=deleteWordGroupButton]').click();
   //   page.getSnackBar().contains('word group', { matchCase: false });
   // });
+
+  // it('should open expansion panel and see the delete button', () => {
+  //   cy.get('[data-test=expansionPanelButton]').first().click();
+  //   page.getSnackBar().find('expansionPanelButton');
+  // })
 });
