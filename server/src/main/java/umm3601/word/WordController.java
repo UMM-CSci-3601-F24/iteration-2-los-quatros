@@ -126,25 +126,36 @@ private Bson constructSortingOrder(Context ctx) {
   }
 
   public void addMultipleWords(Context ctx) {
-    // String body = ctx.body();
-    // Word newWords = ctx.bodyValidator(Word.class)
 
-    // the idea is to make the text disappear after each enter key and add it to a list of words with
-    // one word group and then we can make all of those unique words.
     String body = ctx.body();
-    Word newWord = ctx.bodyValidator(Word.class)
-    .check(td -> td.word != null && td.word.length() > 0,
-        "New words must be non-empty; New words was " + body)
-    .check(td -> td.wordGroup != null && td.wordGroup.length() > 0,
-        "Word Group must be non-empty; Group was " + body)
-    // .check(td -> td.body != null && td.body.length() > 0,
-    //     "Todo must have a non-empty body; body was " + body)
-    .get();
+    String wordGroup = ctx.queryParam("wordGroup");
 
-    wordCollection.insertOne(newWord);
-    ctx.json(Map.of("id", newWord._id));
+    if (wordGroup == null || wordGroup.isEmpty()) {
+        throw new BadRequestResponse("Word group must be provided and non-empty.");
+    }
+
+    String[] wordsArray = body.split(",");
+
+    List<Word> newWords = new ArrayList<>();
+
+    for (String wordText : wordsArray) {
+        String trimmedWordText = wordText.trim();
+
+        if (trimmedWordText.isEmpty()) {
+            throw new BadRequestResponse("Each word must be non-empty; Found an empty word in the list.");
+        }
+
+        Word newWord = new Word();
+        newWord.word = trimmedWordText;
+        newWord.wordGroup = wordGroup;
+
+        newWords.add(newWord);
+    }
+
+    wordCollection.insertMany(newWords);
+    ctx.json(Map.of("insertedCount", newWords.size()));
     ctx.status(HttpStatus.CREATED);
-  }
+}
 
   public void deleteWord(Context ctx) {
     String id = ctx.pathParam("id");

@@ -299,6 +299,51 @@ class WordControllerSpec {
   }
 
   @Test
+  void addMultipleWords() throws IOException {
+    String words = "apple, banana, cherry";
+    String wordGroup = "fruits";
+
+    when(ctx.body()).thenReturn(words);
+    when(ctx.queryParam("wordGroup")).thenReturn(wordGroup);
+
+    wordController.addMultipleWords(ctx);
+
+    verify(ctx).json(mapCaptor.capture());
+    verify(ctx).status(HttpStatus.CREATED);
+    assertEquals(3, mapCaptor.getValue().get("insertedCount"));
+
+    List<Document> addedWords = db.getCollection("words").find(eq("wordGroup", wordGroup)).into(new ArrayList<>());
+    assertEquals(3, addedWords.size());
+
+    List<String> addedWordsList = addedWords.stream().map(doc -> doc.getString("word")).collect(Collectors.toList());
+    assertTrue(addedWordsList.contains("apple"));
+    assertTrue(addedWordsList.contains("banana"));
+    assertTrue(addedWordsList.contains("cherry"));
+
+    for (Document doc : addedWords) {
+        assertEquals(wordGroup, doc.getString("wordGroup"));
+    }
+}
+
+@Test
+void addMultipleWordsWithBadWordGroup() throws IOException {
+    String words = "apple, banana, cherry";
+
+    when(ctx.body()).thenReturn(words);
+    when(ctx.queryParam("wordGroup")).thenReturn(null);
+
+    BadRequestResponse exception = assertThrows(BadRequestResponse.class, () -> {
+        wordController.addMultipleWords(ctx);
+    });
+
+    assertEquals("Word group must be provided and non-empty.", exception.getMessage());
+
+    assertEquals(0, db.getCollection("words").countDocuments(eq("wordGroup", null)));
+}
+
+
+
+  @Test
   void addBadWordWord() throws IOException {
     String newWordJson = """
         {
@@ -421,36 +466,7 @@ class WordControllerSpec {
       .countDocuments(eq("_id", new ObjectId(testID))));
   }
 
-  // @Test
-//   // void addListWords() throws IOException {
-//     List<Map<String, String>> newWords = new ArrayList<>();
-//     Map<String, String> word1 = new HashMap<>();
-//     word1.put("word", "laptop");
-//     word1.put("wordGroup", "technology");
-//     Map<String, String> word2 = new HashMap<>();
-//     word2.put("word", "coffee");
-//     word2.put("wordGroup", "beverage");
-//     Map<String, String> word3 = new HashMap<>();
-//     word3.put("word", "book");
-//     word3.put("wordGroup", "literature");
-//     newWords.add(word1);
-//     newWords.add(word2);
-//     newWords.add(word3);
-//     String newWordsJson = javalinJackson.toJsonString(newWords, List.class);
-//     when(ctx.body()).thenReturn(newWordsJson);
-//     when(ctx.bodyValidator(any(Class.class)))
-//         .thenReturn(new BodyValidator<>(newWordsJson, List.class, () -> newWords));
-//     wordController.addListWords(ctx);
-//     verify(ctx).status(HttpStatus.CREATED);
-//     ArgumentCaptor<Map<String, Object>> mapsCaptor = ArgumentCaptor.forClass(Map.class);
-//     verify(ctx).json(mapsCaptor.capture());
-//     Map<String, Object> responseMap = mapsCaptor.getValue();
-//     List<String> insertedIds = (List<String>) responseMap.get("insertedIds");
-//     for (String id : insertedIds) {
-//         Document addedWord = db.getCollection("words").find(eq("_id", new ObjectId(id))).first();
-//         assertNotNull(addedWord);
-//         assertTrue(newWords.stream().anyMatch(word ->
-//             word.get("word").equals(addedWord.get("word"))
+
 
 @Test
 void deleteListWords() throws IOException {
