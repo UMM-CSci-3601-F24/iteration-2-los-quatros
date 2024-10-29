@@ -52,7 +52,6 @@ export class WordService {
     return this.httpClient.post<{id: string}>(this.wordUrl, newWords).pipe(map(response => response.id))
   }
 
-
   addWord(newWord: Partial<Word>): Observable<string> {
     return this.httpClient.post<{id: string}>(this.wordUrl, newWord).pipe(map(response => response.id))
   }

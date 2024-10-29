@@ -23,25 +23,6 @@ import { Router } from '@angular/router';
   styleUrl: './add-multiple-word.component.scss'
 })
 export class AddMultipleWordComponent {
-
-
-
-  // const input = document.getElementById('wordInput') as HTMLInputElement;
-  // const wordListDiv = document.getElementById('wordList') as HTMLDivElement;
-  // input.addEventListener('Keydown', (event: KeyboardEvent) =>{
-  //   if (event.key === 'Enter' && input.value.trim() !=='') {
-  //     addWordToList(input.value);
-  //     input.value = '';
-  //   }
-  // });
-
-  // function addWordToList(word: string) {
-  //   const wordElement = document.createElement('div');
-  //   wordElement.textContent = word;
-
-  //   wordListDiv.appendChild(wordElement);
-  // }
-
   addMultipleWordForm = new FormGroup({
     word: new FormControl('', Validators.compose([
       Validators.required,
@@ -85,6 +66,37 @@ export class AddMultipleWordComponent {
 
 
 
+  // submitForm() {
+    // this.wordService.addMultipleWord(this.addMultipleWordForm.value).subscribe({
+    //   next: () => {
+    //     this.snackBar.open(
+    //       `Added word group: ${this.addMultipleWordForm.value.wordGroup}`,
+    //       null,
+    //       {duration: 2000}
+    //     );
+    //     const wordGroup = this.addMultipleWordForm.value;
+    //     wordGroup.word = '';
+    //     this.addMultipleWordForm.setValue(wordGroup as { word: string, wordGroup: string });
+    //   },
+  //     error: err => {
+  //       if (err.status === 400) {
+  //         this.snackBar.open(
+  //           `The server failed to process your request to add a new word group. Is the server up? – Error
+  //           Code: ${err.status}\nMessage: ${err.message}`,
+  //             'OK',
+  //             { duration: 5000 }
+  //         );
+  //       } else {
+  //         this.snackBar.open(
+  //           `An unexpected error occurred – Error Code: ${err.status}\nMessage: ${err.message}`,
+  //             'OK',
+  //             { duration: 5000 }
+  //         );
+  //       }
+  //     },
+  //   });
+  // }
+
   submitForm() {
     this.wordService.addMultipleWord(this.addMultipleWordForm.value).subscribe({
       next: () => {
@@ -96,12 +108,12 @@ export class AddMultipleWordComponent {
         const wordGroup = this.addMultipleWordForm.value;
         wordGroup.word = '';
         this.addMultipleWordForm.setValue(wordGroup as { word: string, wordGroup: string });
+        this.router.navigate(['/anagram']);
       },
       error: err => {
         if (err.status === 400) {
           this.snackBar.open(
-            `The server failed to process your request to add a new word group. Is the server up? – Error
-            Code: ${err.status}\nMessage: ${err.message}`,
+            `The server failed to process your request to add a new word group. Is the server up? – Error Code: ${err.status}\nMessage: ${err.message}`,
               'OK',
               { duration: 5000 }
           );
@@ -115,22 +127,6 @@ export class AddMultipleWordComponent {
       },
     });
   }
-
-  //  enterPress() {
-
-  //   addEventListener("keydown", (event) => {});
-  //   onkeydown = (event) => {}
-  //   // (keydown = (event)) {
-
-  //   function enterKey(enter){
-
-  //   }
-  //    this.myControl = new FormControl('');
-
-  //    // this.myControl.reset();
-
-  //     }
-
 }
 
 
