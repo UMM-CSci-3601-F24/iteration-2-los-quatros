@@ -107,7 +107,7 @@ private Bson constructSortingOrder(Context ctx) {
 }
 
 
-public void addNewWord(Context ctx) {
+  public void addNewWord(Context ctx) {
 
     String body = ctx.body();
     Word newWord = ctx.bodyValidator(Word.class)
@@ -134,7 +134,7 @@ public void addNewWord(Context ctx) {
         throw new BadRequestResponse("Word group must be provided and non-empty.");
     }
 
-    String[] wordsArray = body.split(", ");
+    String[] wordsArray = body.split(",");
 
     List<Word> newWords = new ArrayList<>();
 
@@ -191,16 +191,23 @@ public void addNewWord(Context ctx) {
   public void addRoutes(Javalin server) {
     // server.get(API_WORD_BY_ID, this::getWord);
 
+
+
     server.get(API_WORDS, this::getWords);
 
     server.delete(API_WORD_BY_ID, this::deleteWord); //used to be API_WORD_BY_ID
 
     server.post(API_WORDS, this::addNewWord);
+    // server.post(API_WORDS, this::addMultipleWords);
 
-    server.post(API_WORDS, this::addMultipleWords);
+    // server.post(API_WORDS, this::addListWords);
 
     server.delete(API_WORDS_BY_WORDGROUP, this::deleteListWords);
   }
 
 
 }
+
+
+
+
