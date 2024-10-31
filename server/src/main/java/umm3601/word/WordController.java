@@ -22,6 +22,7 @@ import com.mongodb.client.MongoDatabase;
 import com.mongodb.client.model.Sorts;
 import com.mongodb.client.result.DeleteResult;
 // import com.mongodb.client.result.InsertManyResult;
+import com.mongodb.client.result.InsertManyResult;
 
 import io.javalin.Javalin;
 import io.javalin.http.BadRequestResponse;
@@ -138,36 +139,21 @@ public void addNewWord2(Context ctx) {
   //     "Todo must have a non-empty body; body was " + body)
   .get();
 
-  if (newWord.word.contains(",")) {
-
     String[] wordsArray = newWord.word.split(",");
-    // List<Word> wordList = new ArrayList<>();
-
-    System.out.println(Arrays.toString(wordsArray));
+    List<Word> wordList = new ArrayList<>();
 
     for (String wordnew: wordsArray) {
       Word enteredWord = new Word();
       enteredWord.word = wordnew.trim();
-      // System.out.println(wordnew);
       enteredWord.wordGroup = newWord.wordGroup;
-      System.out.println(newWord.wordGroup);
-      // wordList.add(enteredWord);
-      System.out.println(enteredWord);
-      wordCollection.insertOne(enteredWord);
-      // System.out.println(wordList);
-
-
+      wordList.add(enteredWord);
+      // System.out.println(newWord.wordGroup);
+      // System.out.println(enteredWord);
     }
-
-      // wordCollection.insertMany(wordList);
-
-  } else {
-
-    wordCollection.insertOne(newWord);
-
-  }
-
-  ctx.json(Map.of("id", newWord._id));
+    System.out.println(wordList);
+    InsertManyResult result = wordCollection.insertMany(wordList);
+    // System.out.println(result);
+  ctx.json(result.getInsertedIds());
   ctx.status(HttpStatus.CREATED);
 }
 
