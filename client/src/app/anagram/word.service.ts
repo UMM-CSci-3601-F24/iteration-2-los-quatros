@@ -36,8 +36,9 @@ export class WordService {
     //let filteredWords = words;
 
     if(filters.sortType) {
-      if(filters.sortType === "alphabetical"){
-        filteredWords.map(w => w.word).sort();
+      if(filters.sortType === "Alphabetical"){
+        filteredWords.sort((a, b) => a.word.localeCompare(b.word));
+        // filteredWords.sort((a, b) => a.length - b.length);
       }
     }
     if(filters.sortOrder) {
