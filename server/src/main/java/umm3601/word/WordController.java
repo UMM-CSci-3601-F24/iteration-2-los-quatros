@@ -5,6 +5,8 @@ import static com.mongodb.client.model.Filters.eq;
 import static com.mongodb.client.model.Filters.regex;
 
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
@@ -34,6 +36,7 @@ import umm3601.Controller;
 public class WordController implements Controller {
 
     private static final String API_WORDS = "/api/anagram";
+    // private static final String API_MULTIPLE = "/api/anagram/multiple";
     private static final String API_WORD_BY_ID = "/api/anagram/{id}";
     private static final String API_WORDS_BY_WORDGROUP = "/api/anagram/{wordGroup}";
     static final String WORD_KEY = "word";
@@ -106,56 +109,69 @@ private Bson constructSortingOrder(Context ctx) {
     return sortingOrder;
 }
 
+public void addNewWord(Context ctx) {
 
-  public void addNewWord(Context ctx) {
+  String body = ctx.body();
+  Word newWord = ctx.bodyValidator(Word.class)
+  .check(td -> td.word != null && td.word.length() > 0,
+      "New words must be non-empty; New words was " + body)
+  .check(td -> td.wordGroup != null && td.wordGroup.length() > 0,
+      "Word Group must be non-empty; Group was " + body)
+  // .check(td -> td.body != null && td.body.length() > 0,
+  //     "Todo must have a non-empty body; body was " + body)
+  .get();
 
-    String body = ctx.body();
-    Word newWord = ctx.bodyValidator(Word.class)
-    .check(td -> td.word != null && td.word.length() > 0,
-        "New words must be non-empty; New words was " + body)
-    .check(td -> td.wordGroup != null && td.wordGroup.length() > 0,
-        "Word Group must be non-empty; Group was " + body)
-    // .check(td -> td.body != null && td.body.length() > 0,
-    //     "Todo must have a non-empty body; body was " + body)
-    .get();
+  wordCollection.insertOne(newWord);
+  ctx.json(Map.of("id", newWord._id));
+  ctx.status(HttpStatus.CREATED);
+}
+
+public void addNewWord2(Context ctx) {
+  String body = ctx.body();
+
+  Word newWord = ctx.bodyValidator(Word.class)
+  .check(td -> td.word != null && td.word.length() > 0,
+      "New words must be non-empty; New words was " + body)
+  .check(td -> td.wordGroup != null && td.wordGroup.length() > 0,
+      "Word Group must be non-empty; Group was " + body)
+  // .check(td -> td.body != null && td.body.length() > 0,
+  //     "Todo must have a non-empty body; body was " + body)
+  .get();
+
+  if (newWord.word.contains(",")) {
+
+    String[] wordsArray = newWord.word.split(",");
+    // List<Word> wordList = new ArrayList<>();
+
+    System.out.println(Arrays.toString(wordsArray));
+
+    for (String wordnew: wordsArray) {
+      Word enteredWord = new Word();
+      enteredWord.word = wordnew.trim();
+      // System.out.println(wordnew);
+      enteredWord.wordGroup = newWord.wordGroup;
+      System.out.println(newWord.wordGroup);
+      // wordList.add(enteredWord);
+      System.out.println(enteredWord);
+      wordCollection.insertOne(enteredWord);
+      // System.out.println(wordList);
+
+
+    }
+
+      // wordCollection.insertMany(wordList);
+
+  } else {
 
     wordCollection.insertOne(newWord);
-    ctx.json(Map.of("id", newWord._id));
-    ctx.status(HttpStatus.CREATED);
 
   }
 
-  public void addMultipleWords(Context ctx) {
-
-    String body = ctx.body();
-    String wordGroup = ctx.queryParam("wordGroup");
-
-    if (wordGroup == null || wordGroup.isEmpty()) {
-        throw new BadRequestResponse("Word group must be provided and non-empty.");
-    }
-
-    String[] wordsArray = body.split(",");
-
-    List<Word> newWords = new ArrayList<>();
-
-    for (String wordText : wordsArray) {
-        String trimmedWordText = wordText.trim();
-
-        if (trimmedWordText.isEmpty()) {
-            throw new BadRequestResponse("Each word must be non-empty; Found an empty word in the list.");
-        }
-
-        Word newWord = new Word();
-        newWord.word = trimmedWordText;
-        newWord.wordGroup = wordGroup;
-
-        newWords.add(newWord);
-    }
-
-    wordCollection.insertMany(newWords);
-    ctx.json(Map.of("insertedCount", newWords.size()));
-    ctx.status(HttpStatus.CREATED);
+  ctx.json(Map.of("id", newWord._id));
+  ctx.status(HttpStatus.CREATED);
 }
+
+
 
   public void deleteWord(Context ctx) {
     String id = ctx.pathParam("id");
@@ -198,7 +214,8 @@ private Bson constructSortingOrder(Context ctx) {
     server.delete(API_WORD_BY_ID, this::deleteWord); //used to be API_WORD_BY_ID
 
     server.post(API_WORDS, this::addNewWord);
-    // server.post(API_WORDS, this::addMultipleWords);
+
+    // server.post(API_MULTIPLE, this::addMultipleWords);
 
     // server.post(API_WORDS, this::addListWords);
 
