@@ -34,11 +34,12 @@ export class WordService {
   sortWords(words: Word[], filters: {sortType?: string; sortOrder?: boolean}): Word[] {
     const filteredWords = words;
     //let filteredWords = words;
-
+    // filteredWords.sort((a, b) => a.word.localeCompare(b.word));
     if(filters.sortType) {
       if(filters.sortType === "alphabetical"){
-        filteredWords.map(w => w.word).sort();
+        filteredWords.sort((a, b) => a.word.localeCompare(b.word));
       }
+
     }
     if(filters.sortOrder) {
       filteredWords.reverse();

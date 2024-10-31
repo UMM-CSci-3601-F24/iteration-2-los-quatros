@@ -69,4 +69,8 @@ describe('Anagram Solver', () => {
   //   cy.get('[data-test=deleteWordGroupButton]').click();
   //   page.getSnackBar().contains('word group', { matchCase: false });
   // });
+
+  // it('should sort alphabetically by word', ()=>{
+  //   cy.get[]
+  // })
 });
