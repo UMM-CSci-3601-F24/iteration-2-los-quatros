@@ -6,7 +6,7 @@ import { MatInputModule } from '@angular/material/input';
 import { AsyncPipe, CommonModule } from '@angular/common';
 import { GridCell } from './grid-cell';
 import { Edges } from './edges';
-
+import { Colors } from './colors';
 
 @Component({
   selector: 'app-grid-cell',
@@ -24,7 +24,6 @@ import { Edges } from './edges';
   ],
 })
 export class GridCellComponent {
-
   @Input({ required: true }) gridCell: GridCell;
 
   /**
@@ -33,11 +32,11 @@ export class GridCellComponent {
    */
   constructor() {
     if (!this.gridCell) {
-      this.gridCell = new GridCell;
+      this.gridCell = new GridCell();
     }
   }
 
-   /**
+  /**
    * Handles input changes and updates the grid cell value if valid.
    * @param value - The input value to be set.
    */
@@ -67,6 +66,9 @@ export class GridCellComponent {
     this.gridCell.edges = edges;
   }
 
+  setColors(colors: Colors) {
+    this.gridCell.color = colors;
+  }
   /**
    * Sets the editable state of the grid cell.
    * @param state - The editable state to be set.
@@ -75,7 +77,7 @@ export class GridCellComponent {
     this.gridCell.editable = state;
   }
 
-   /**
+  /**
    * Handles keydown events to toggle the bold state of the grid cell edges.
    * @param event - The keyboard event.
    */
@@ -96,9 +98,7 @@ export class GridCellComponent {
           this.gridCell.toggleLeftEdge();
           break;
         default:
-          break;
       }
     }
   }
 }
-
