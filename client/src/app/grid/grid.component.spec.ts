@@ -6,11 +6,11 @@ import { MatInputModule } from '@angular/material/input';
 import { GridCellComponent } from '../grid-cell/grid-cell.component';
 import { CommonModule } from '@angular/common';
 import { MatGridListModule } from '@angular/material/grid-list';
-import { MatExpansionModule } from '@angular/material/expansion';
 import { MatIconModule } from '@angular/material/icon';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { BrowserModule } from '@angular/platform-browser';
 import { AppRoutingModule } from '../app-routing.module';
+import { MatListModule } from '@angular/material/list';
 
 describe('GridCellComponent', () => {
   let component: GridComponent;
@@ -25,12 +25,12 @@ describe('GridCellComponent', () => {
         CommonModule,
         GridCellComponent,
         MatGridListModule,
-        MatExpansionModule,
         MatIconModule,
         GridComponent,
         BrowserModule,
         BrowserAnimationsModule,
         AppRoutingModule,
+        MatListModule,
       ]
     })
     .compileComponents();

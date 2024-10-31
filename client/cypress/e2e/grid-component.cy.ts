@@ -11,12 +11,3 @@ describe('Grid Component', () => {
     });
   });
 
-  describe('Grid Component Expansion Panel', () => {
-    it('should open the expansion panel', () => {
-      cy.visit('/grid');
-
-      cy.get('mat-expansion-panel-header').click();
-
-      cy.get('.mat-expansion-panel-body').should('be.visible');
-    });
-  });

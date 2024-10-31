@@ -7,11 +7,8 @@ import { MatGridListModule } from '@angular/material/grid-list';
 import { CommonModule } from '@angular/common';
 import { GridCell } from '../grid-cell/grid-cell';
 import { GridCellComponent } from '../grid-cell/grid-cell.component';
-import { MatExpansionModule } from '@angular/material/expansion';
 import { MatIconModule } from '@angular/material/icon';
-import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import { BrowserModule } from '@angular/platform-browser';
-// import { AppRoutingModule } from '../app-routing.module';
+import {MatListModule} from '@angular/material/list';
 
 @Component({
   selector: 'app-grid-component',
@@ -26,11 +23,8 @@ import { BrowserModule } from '@angular/platform-browser';
     CommonModule,
     GridCellComponent,
     MatGridListModule,
-    MatExpansionModule,
     MatIconModule,
-    BrowserModule,
-    BrowserAnimationsModule,
-    // AppRoutingModule,
+    MatListModule,
   ],
 })
 export class GridComponent {
