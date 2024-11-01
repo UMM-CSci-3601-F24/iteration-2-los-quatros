@@ -35,7 +35,6 @@ export class WordService {
   }
   sortWords(words: Word[], filters: {sortType?: string; sortOrder?: boolean}): Word[] {
     const filteredWords = words;
-    //let filteredWords = words;
 
     if(filters.sortType) {
       if(filters.sortType === "alphabetical"){
@@ -47,11 +46,6 @@ export class WordService {
     }
     return filteredWords;
   }
-
-  addMultipleWord(newWords: Partial<Word>): Observable<string> {
-    return this.httpClient.post<{id: string}>(this.wordUrl, newWords).pipe(map(response => response.id))
-  }
-
 
   addWord(newWord: Partial<Word>): Observable<string> {
     return this.httpClient.post<{id: string}>(this.wordUrl, newWord).pipe(map(response => response.id))

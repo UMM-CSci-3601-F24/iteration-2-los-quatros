@@ -7,7 +7,6 @@ import { WordListComponent } from './anagram/word-list.component';
 
 
 import { AddWordComponent } from './anagram/add-word.component';
-import { AddMultipleWordComponent } from './anagram/add-multiple-word.component';
 
 // Note that the 'users/new' route needs to come before 'users/:id'.
 // If 'users/:id' came first, it would accidentally catch requests to
@@ -16,7 +15,6 @@ const routes: Routes = [
   {path: '', component: HomeComponent, title: 'Home'},
   {path: 'anagram', component: WordListComponent, title: 'Anagram'},
   {path: 'anagram/new', component: AddWordComponent, title: 'Add Word'},
-  {path: 'anagram/multiple', component: AddMultipleWordComponent, title: 'Add Words'},
   // this is kind of backwards but allows us to pass an id for deleteWord without having profile
   {path: 'anagram/:id', component: WordListComponent, title: 'Anagram'},
   {path: 'anagram/:wordGroup', component: WordListComponent, title: 'Anagram'},

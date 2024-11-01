@@ -1,16 +1,16 @@
 package umm3601.word;
 
+
 import static com.mongodb.client.model.Filters.and;
 import static com.mongodb.client.model.Filters.eq;
 import static com.mongodb.client.model.Filters.regex;
 
+
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collection;
 import java.util.List;
-import java.util.Map;
 import java.util.Objects;
 import java.util.regex.Pattern;
+
 
 import org.bson.Document;
 import org.bson.UuidRepresentation;
@@ -18,31 +18,35 @@ import org.bson.conversions.Bson;
 import org.bson.types.ObjectId;
 import org.mongojack.JacksonMongoCollection;
 
+
 import com.mongodb.client.MongoDatabase;
 import com.mongodb.client.model.Sorts;
 import com.mongodb.client.result.DeleteResult;
-// import com.mongodb.client.result.InsertManyResult;
 import com.mongodb.client.result.InsertManyResult;
+
 
 import io.javalin.Javalin;
 import io.javalin.http.BadRequestResponse;
 import io.javalin.http.Context;
 import io.javalin.http.HttpStatus;
 import io.javalin.http.NotFoundResponse;
-// import kotlin.collections.builders.ListBuilder;
 import umm3601.Controller;
+
+
+
 
 
 
 public class WordController implements Controller {
 
+
     private static final String API_WORDS = "/api/anagram";
-    // private static final String API_MULTIPLE = "/api/anagram/multiple";
     private static final String API_WORD_BY_ID = "/api/anagram/{id}";
     private static final String API_WORDS_BY_WORDGROUP = "/api/anagram/{wordGroup}";
     static final String WORD_KEY = "word";
     static final String WORD_GROUP_KEY = "wordGroup";
     static final String SORT_ORDER_KEY = "sortOrder";
+
 
     private final JacksonMongoCollection<Word> wordCollection;
 
@@ -53,6 +57,7 @@ public class WordController implements Controller {
             Word.class,
             UuidRepresentation.STANDARD);
     }
+
 
     public void getWord(Context ctx) {
         String id = ctx.pathParam("id");
@@ -72,6 +77,8 @@ public class WordController implements Controller {
     }
 
 
+
+
     public void getWords(Context ctx) {
         Bson combinedFilter = constructFilter(ctx);
         Bson sortingOrder = constructSortingOrder(ctx);
@@ -85,12 +92,16 @@ public class WordController implements Controller {
         ctx.status(HttpStatus.OK);
     }
 
+
     private Bson constructFilter(Context ctx) {
         List<Bson> filters = new ArrayList<>();
 
         if (ctx.queryParamMap().containsKey(WORD_KEY)) {
-          Pattern pattern = Pattern.compile(Pattern.quote(ctx.queryParam(WORD_KEY)), Pattern.CASE_INSENSITIVE);
-          filters.add(regex(WORD_KEY, pattern));
+          String word = ctx.queryParam(WORD_KEY);
+          for (char c : word.toCharArray()) {
+              filters.add(regex("word", Pattern.compile(Pattern.quote(String.valueOf(c)), Pattern.CASE_INSENSITIVE)));
+
+      }
         }
 
         if (ctx.queryParamMap().containsKey(WORD_GROUP_KEY)) {
@@ -99,9 +110,9 @@ public class WordController implements Controller {
         }
 
         Bson combinedFilter = filters.isEmpty() ? new Document() : and(filters);
-
         return combinedFilter;
     }
+
 
 private Bson constructSortingOrder(Context ctx) {
     String sortBy = Objects.requireNonNullElse(ctx.queryParam("sortType"), "alphabetical");
@@ -110,33 +121,14 @@ private Bson constructSortingOrder(Context ctx) {
     return sortingOrder;
 }
 
+
 public void addNewWord(Context ctx) {
-
   String body = ctx.body();
   Word newWord = ctx.bodyValidator(Word.class)
-  .check(td -> td.word != null && td.word.length() > 0,
+  .check(wr -> wr.word != null && wr.word.length() > 0,
       "New words must be non-empty; New words was " + body)
-  .check(td -> td.wordGroup != null && td.wordGroup.length() > 0,
+  .check(wr -> wr.wordGroup != null && wr.wordGroup.length() > 0,
       "Word Group must be non-empty; Group was " + body)
-  // .check(td -> td.body != null && td.body.length() > 0,
-  //     "Todo must have a non-empty body; body was " + body)
-  .get();
-
-  wordCollection.insertOne(newWord);
-  ctx.json(Map.of("id", newWord._id));
-  ctx.status(HttpStatus.CREATED);
-}
-
-public void addNewWord2(Context ctx) {
-  String body = ctx.body();
-
-  Word newWord = ctx.bodyValidator(Word.class)
-  .check(td -> td.word != null && td.word.length() > 0,
-      "New words must be non-empty; New words was " + body)
-  .check(td -> td.wordGroup != null && td.wordGroup.length() > 0,
-      "Word Group must be non-empty; Group was " + body)
-  // .check(td -> td.body != null && td.body.length() > 0,
-  //     "Todo must have a non-empty body; body was " + body)
   .get();
 
     String[] wordsArray = newWord.word.split(",");
@@ -147,21 +139,16 @@ public void addNewWord2(Context ctx) {
       enteredWord.word = wordnew.trim();
       enteredWord.wordGroup = newWord.wordGroup;
       wordList.add(enteredWord);
-      // System.out.println(newWord.wordGroup);
-      // System.out.println(enteredWord);
     }
-    System.out.println(wordList);
     InsertManyResult result = wordCollection.insertMany(wordList);
-    // System.out.println(result);
   ctx.json(result.getInsertedIds());
   ctx.status(HttpStatus.CREATED);
 }
 
-
-
   public void deleteWord(Context ctx) {
     String id = ctx.pathParam("id");
     DeleteResult deleteResult = wordCollection.deleteOne(eq("_id", new ObjectId(id)));
+
 
     if (deleteResult.getDeletedCount() != 1) {
         ctx.status(HttpStatus.NOT_FOUND);
@@ -173,9 +160,11 @@ public void addNewWord2(Context ctx) {
         ctx.status(HttpStatus.OK);
   }
 
+
     public void deleteListWords(Context ctx) {
       String deleteWordGroup = ctx.pathParam("wordGroup");
       DeleteResult deleteResult = wordCollection.deleteMany(eq("wordGroup", deleteWordGroup));
+
 
       if (deleteResult.getDeletedCount() == 0) {
           ctx.status(HttpStatus.NOT_FOUND);
@@ -187,30 +176,10 @@ public void addNewWord2(Context ctx) {
       ctx.status(HttpStatus.OK);
   }
 
-
-
-
   public void addRoutes(Javalin server) {
-    // server.get(API_WORD_BY_ID, this::getWord);
-
-
-
     server.get(API_WORDS, this::getWords);
-
     server.delete(API_WORD_BY_ID, this::deleteWord); //used to be API_WORD_BY_ID
-
     server.post(API_WORDS, this::addNewWord);
-
-    // server.post(API_MULTIPLE, this::addMultipleWords);
-
-    // server.post(API_WORDS, this::addListWords);
-
     server.delete(API_WORDS_BY_WORDGROUP, this::deleteListWords);
   }
-
-
 }
-
-
-
-

@@ -18,6 +18,8 @@ import { MatNavList } from '@angular/material/list';
 import { MatListModule } from '@angular/material/list';
 import { MatInputModule } from '@angular/material/input';
 import { MatSlideToggleModule } from '@angular/material/slide-toggle';
+import { Router } from '@angular/router';
+
 
 @Component({
   selector: 'app-word-list-component',
@@ -43,6 +45,7 @@ import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 })
 export class WordListComponent {
 
+
   // client side sorting
   sortType = signal<string | undefined>(undefined);
   sortOrder = signal<boolean | undefined>(false);
@@ -50,14 +53,21 @@ export class WordListComponent {
   contains = signal<string|undefined>(undefined);
   group = signal<string|undefined>(undefined);
 
+
   errMsg = signal<string | undefined>(undefined);
 
-  constructor(private wordService: WordService, private snackBar: MatSnackBar) {
-    // Nothing here – everything is in the injection parameters.
+
+
+
+
+
+  constructor(private wordService: WordService, private snackBar: MatSnackBar, private router: Router) {
   }
+
 
   private contains$ = toObservable(this.contains);
   private group$ = toObservable(this.group);
+
 
   serverFilteredWords =
     toSignal(
@@ -83,9 +93,11 @@ export class WordListComponent {
         }),
         tap(() => {
 
+
         })
       )
     );
+
 
   filteredWords = computed(() => {
     const serverFilteredWords = this.serverFilteredWords();
@@ -94,6 +106,7 @@ export class WordListComponent {
       sortOrder: this.sortOrder(),
     });
   });
+
 
   deleteWord(id: string) {
     // const tempSortType = this.sortType.toString;
@@ -105,11 +118,13 @@ export class WordListComponent {
     })
   }
 
+
   deleteWordGroup(group: string) {
     this.wordService.deleteWordGroup(group).subscribe(() => {
       this.snackBar.open(`We deleted a word group!`, 'OK', {duration: 6000});
     })
     // if(group.length >= 1) {
+
 
     // } else {
     //   this.snackBar.open('Failed to delete word group', 'OK', {duration: 6000});

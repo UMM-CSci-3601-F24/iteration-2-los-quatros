@@ -2,7 +2,7 @@ package umm3601.word;
 
 import static com.mongodb.client.model.Filters.eq;
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotEquals;
+// import static org.junit.jupiter.api.Assertions.assertNotEquals;
 // import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
@@ -298,29 +298,29 @@ class WordControllerSpec {
   //   assertEquals(newWord.wordGroup, addedWord.get("wordGroup")); //(WordController.WORD_GROUP_KEY));
   // }
 
-  @Test
-  void addWord() throws IOException {
-    Word newWord = new Word();
-    newWord.word = "computer";
-    newWord.wordGroup = "technology";
+  // @Test
+  // void addWord() throws IOException {
+  //   Word newWord = new Word();
+  //   newWord.word = "computer";
+  //   newWord.wordGroup = "technology";
 
-    String newWordJson = javalinJackson.toJsonString(newWord, Word.class);
+  //   String newWordJson = javalinJackson.toJsonString(newWord, Word.class);
 
-    when(ctx.bodyValidator(Word.class))
-      .thenReturn(new BodyValidator<Word>(newWordJson, Word.class,
-                    () -> javalinJackson.fromJsonString(newWordJson, Word.class)));
+  //   when(ctx.bodyValidator(Word.class))
+  //     .thenReturn(new BodyValidator<Word>(newWordJson, Word.class,
+  //                   () -> javalinJackson.fromJsonString(newWordJson, Word.class)));
 
-    wordController.addNewWord(ctx);
-    verify(ctx).json(mapCaptor.capture());
+  //   wordController.addNewWord(ctx);
+  //   verify(ctx).json(mapCaptor.capture());
 
-    verify(ctx).status(HttpStatus.CREATED);
-    Document addedWord = db.getCollection("words")
-        .find(eq("_id", new ObjectId(mapCaptor.getValue().get("id")))).first();
+  //   verify(ctx).status(HttpStatus.CREATED);
+  //   Document addedWord = db.getCollection("words")
+  //       .find(eq("_id", new ObjectId(mapCaptor.getValue().get("id")))).first();
 
-    assertNotEquals("", addedWord.get("_id"));
-    assertEquals(newWord.word, addedWord.get(WordController.WORD_KEY)); //("word"));
-    assertEquals(newWord.wordGroup, addedWord.get("wordGroup")); //(WordController.WORD_GROUP_KEY));
-  }
+  //   assertNotEquals("", addedWord.get("_id"));
+  //   assertEquals(newWord.word, addedWord.get(WordController.WORD_KEY)); //("word"));
+  //   assertEquals(newWord.wordGroup, addedWord.get("wordGroup")); //(WordController.WORD_GROUP_KEY));
+  // }
 
   @Test
   void addWord2() throws IOException {
@@ -334,7 +334,7 @@ class WordControllerSpec {
       .thenReturn(new BodyValidator<Word>(newWordJson, Word.class,
                     () -> javalinJackson.fromJsonString(newWordJson, Word.class)));
 
-    wordController.addNewWord2(ctx);
+    wordController.addNewWord(ctx);
     verify(ctx).json(mapCaptor.capture());
     verify(ctx).status(HttpStatus.CREATED);
     System.out.println(mapCaptor.getValue().toString());
