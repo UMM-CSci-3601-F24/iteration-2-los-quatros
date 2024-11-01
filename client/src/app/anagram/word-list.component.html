@@ -23,6 +23,11 @@
           </mat-select>
         </mat-form-field>
         <div>
+          <!-- <label for="sortOrder">Sort Order</label>
+          <mat-radio-group aria-label="Sort Order" [(ngModel)]="sortOrder" data-test="sortOrderRadio">
+            <mat-radio-button value="increasing">Increasing</mat-radio-button>
+            <mat-radio-button value="decreasing">Decreasing</mat-radio-button>
+          </mat-radio-group> -->
           <p>
             <mat-slide-toggle class="sortOrder" [(ngModel)]="sortOrder" data-test="sortOrderToggle" aria-label="Change sort order">
               Change Sort Order
@@ -31,6 +36,9 @@
         </div>
         <button mat-fab class="add-word-fab" matTooltip="Add New Word Group" matTooltipPosition="right" routerLink="/anagram/new" data-test="addWordButton">
           <mat-icon class="md-24" aria-label="Add Word List">add</mat-icon>
+        </button>
+        <button mat-fab class="add-word-fab" matTooltip="Add Multiple Words in Group" matTooltipPosition="right" routerLink="/anagram/multiple" data-test="multipleWordButton">
+        <mat-icon class="md-24" aria-label="Add Word List">add</mat-icon>
         </button>
         <button mat-fab class="delete-wordGroup-fab" matTooltip="Delete Word Group" matTooltipPosition="right"
           (click)="deleteWordGroup(group.toString())" routerLink="/anagram" data-test="deleteWordGroupButton">
