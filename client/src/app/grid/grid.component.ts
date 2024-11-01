@@ -7,6 +7,8 @@ import { MatGridListModule } from '@angular/material/grid-list';
 import { CommonModule } from '@angular/common';
 import { GridCell } from '../grid-cell/grid-cell';
 import { GridCellComponent } from '../grid-cell/grid-cell.component';
+import { MatIconModule } from '@angular/material/icon';
+import {MatListModule} from '@angular/material/list';
 
 @Component({
   selector: 'app-grid-component',
@@ -21,6 +23,8 @@ import { GridCellComponent } from '../grid-cell/grid-cell.component';
     CommonModule,
     GridCellComponent,
     MatGridListModule,
+    MatIconModule,
+    MatListModule,
   ],
 })
 export class GridComponent {
