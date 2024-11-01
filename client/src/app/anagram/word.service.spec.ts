@@ -117,8 +117,9 @@ describe('WordService', () => {
     it('filters by alphabetical increasing', () => {
       const sortType = "alphabetical";
       const sortOrder = false;
+      const sortByWordOrGroup = "word";
       console.log(`Words before sorting: ${testWords.map(w => w.word)}`);
-      const filteredWords = wordService.sortWords(testWords, {sortType: sortType, sortOrder: sortOrder});
+      const filteredWords = wordService.sortWords(testWords, {sortType: sortType, sortOrder: sortOrder, sortByWordOrGroup: sortByWordOrGroup});
       console.log(`Words after sorting: ${filteredWords.map(w => w.word)}`);
       console.log(`Test words after sorting: ${testWords.map(w => w.word)}`);
       expect(filteredWords[0].word).toBe("El");
@@ -130,7 +131,8 @@ describe('WordService', () => {
     it('filters by alphabetical decreasing', () => {
       const sortType = "alphabetical";
       const sortOrder = true;
-      const filteredWords = wordService.sortWords(testWords, {sortType: sortType, sortOrder: sortOrder});
+      const sortByWordOrGroup = "word";
+      const filteredWords = wordService.sortWords(testWords, {sortType: sortType, sortOrder: sortOrder, sortByWordOrGroup: sortByWordOrGroup});
       expect(filteredWords[4].word).toBe("El");
       expect(filteredWords[3].word).toBe("Jakob");
       expect(filteredWords[2].word).toBe("Keenan");
