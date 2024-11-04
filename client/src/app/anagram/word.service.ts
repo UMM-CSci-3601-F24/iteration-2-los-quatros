@@ -31,14 +31,26 @@ export class WordService {
       params: httpParams,
     });
   }
-  sortWords(words: Word[], filters: {sortType?: string; sortOrder?: boolean}): Word[] {
+  sortWords(words: Word[], filters: {sortType?: string; sortOrder?: boolean; sortByWordOrGroup?: string}): Word[] {
     const filteredWords = words;
     //let filteredWords = words;
+    // filteredWords.sort((a, b) => a.word.localeCompare(b.word));
 
     if(filters.sortType) {
       if(filters.sortType === "alphabetical"){
-        filteredWords.map(w => w.word).sort();
+        if(filters.sortByWordOrGroup =="word") {
+          filteredWords.sort((a, b) => a.word.localeCompare(b.word));
+        }
+        else {
+          filteredWords.sort((a, b) => a.wordGroup.localeCompare(b.wordGroup));
+        }
       }
+
+
+      if(filters.sortType === "null"){
+        return filteredWords
+      }
+
     }
     if(filters.sortOrder) {
       filteredWords.reverse();

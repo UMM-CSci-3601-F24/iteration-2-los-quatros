@@ -18,12 +18,14 @@ import { MatNavList } from '@angular/material/list';
 import { MatListModule } from '@angular/material/list';
 import { MatInputModule } from '@angular/material/input';
 import { MatSlideToggleModule } from '@angular/material/slide-toggle';
+import {MatExpansionModule} from '@angular/material/expansion';
 
 @Component({
   selector: 'app-word-list-component',
   standalone: true,
   imports: [
     MatCardModule,
+    MatExpansionModule,
     MatFormField,
     MatRadioModule,
     MatSelectModule,
@@ -46,7 +48,9 @@ export class WordListComponent {
   // client side sorting
   sortType = signal<string | undefined>(undefined);
   sortOrder = signal<boolean | undefined>(false);
+  sortByWordOrGroup = signal<string | undefined>(undefined);
   //server side filtering
+
   contains = signal<string|undefined>(undefined);
   group = signal<string|undefined>(undefined);
 
@@ -92,6 +96,8 @@ export class WordListComponent {
     return this.wordService.sortWords(serverFilteredWords, {
       sortType: this.sortType(),
       sortOrder: this.sortOrder(),
+      sortByWordOrGroup: this.sortByWordOrGroup(),
+
     });
   });
 
