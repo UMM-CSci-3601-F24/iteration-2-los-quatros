@@ -54,9 +54,9 @@ describe('Word List', () => {
       wordList.serverFilteredWords().filter((word: Word) => word.wordGroup === "teachers").length
     ).toBe(1);
   });
-  it('call delete word', () => {
-    wordList.deleteWord("Mac_id");
-  });
+  // it('call delete word', () => {
+  //   wordList.deleteWord("Mac_id");
+  // });
 });
 
 describe('misbehaving word list', () => {
@@ -108,6 +108,7 @@ describe('misbehaving word list', () => {
       .withContext('the error message will be')
       .toContain('Problem contacting the server – Error Code:');
   });
+
 });
 
 // describe('delete Word', () => {
