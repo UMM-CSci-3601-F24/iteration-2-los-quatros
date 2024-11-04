@@ -1,3 +1,4 @@
+[![Review Assignment Due Date](https://classroom.github.com/assets/deadline-readme-button-22041afd0340ce965d47ae6ef1cefeee28c7c493a6346c4f15d667ab976d596c.svg)](https://classroom.github.com/a/82Q09jAd)
 # CSCI 3601 Iteration Template <!-- omit in toc -->
 
 - [Development](#development)
@@ -39,6 +40,7 @@ From the `server` directory:
 - `./gradlew checkstyleMain` to run Checkstyle on the server Java code in the `src/main` folder
 - `./gradlew checkstyleTest` to run Checkstyle on the server Java code in the `src/test` folder
 - `./gradlew check` will run the tests, run the Checkstyle checks, and generate coverage reports in one command
+  - find coverage report for server at server/build/jacocoHtml/index.html
 
 From the `client` directory:
 
@@ -46,6 +48,7 @@ From the `client` directory:
 - `ng test` to test the client
   - Or `ng test --no-watch --code-coverage` to run the client tests once and
     also compute the code coverage.
+  - coverage report is at client/coverage/client/index.html
 - `ng e2e` and `ng e2e --watch` to run end-to-end tests
 
 From the `database` directory:
