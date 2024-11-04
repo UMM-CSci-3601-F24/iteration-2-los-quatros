@@ -2,6 +2,7 @@ import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { FormsModule } from '@angular/forms';
 import { GridCellComponent } from './grid-cell.component';
 
+
 describe('GridCellComponent', () => {
   let component: GridCellComponent;
   let fixture: ComponentFixture<GridCellComponent>;
@@ -32,6 +33,17 @@ describe('GridCellComponent', () => {
     expect(cell.gridCell.edges.right).toBeFalse();
     expect(cell.gridCell.edges.bottom).toBeTrue();
     expect(cell.gridCell.edges.left).toBeFalse();
+  });
+
+  it('should create a cell with highlights', () => {
+    const cell = new GridCellComponent();
+
+    const Colors = { yellow: true, green: false, red: true };
+    cell.setColors(Colors);
+
+    expect(cell.gridCell.color.yellow).toBeTrue();
+    expect(cell.gridCell.color.green).toBeFalse();
+    expect(cell.gridCell.color.red).toBeTrue();
   });
 
   it('should allow input into the cell', () => {
@@ -87,6 +99,7 @@ describe('GridCellComponent', () => {
     expect(cellElement.classList).toContain('bold-bottom');
     expect(cellElement.classList).toContain('bold-left');
   });
+
 
   it('should not toggle any edges on key down with Ctrl when an unhandled key is pressed', () => {
     const fixture = TestBed.createComponent(GridCellComponent);

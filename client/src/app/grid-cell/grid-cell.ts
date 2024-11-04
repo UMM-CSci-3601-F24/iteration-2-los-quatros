@@ -26,9 +26,7 @@ export class GridCell {
   }
 
   toggleYellowColor() {
-    console.log("Flipping yellow from " + this.color.yellow);
     this.color.yellow = !this.color.yellow;
-    console.log("   to " + this.color.yellow);
   }
 
   toggleGreenColor() {
