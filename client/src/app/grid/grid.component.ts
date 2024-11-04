@@ -9,6 +9,7 @@ import { GridCell } from '../grid-cell/grid-cell';
 import { GridCellComponent } from '../grid-cell/grid-cell.component';
 import { MatIconModule } from '@angular/material/icon';
 import { MatListModule } from '@angular/material/list';
+import { Colors } from '../grid-cell/colors';
 
 @Component({
   selector: 'app-grid-component',
@@ -91,23 +92,27 @@ export class GridComponent {
     }
   }
 
+
   highlightCell(color: string, col: number, row: number) {
-    switch (color) {
-      case 'yellow':
-        if (this.grid[col][row]) {
-          this.grid[col][row].toggleYellowColor();
-        }
-        break;
-      case 'green':
-        if (this.grid[col][row]) {
-          this.grid[col][row].toggleGreenColor();
-        }
-        break;
-      case 'red':
-        if (this.grid[col][row]) {
-          this.grid[col][row].toggleRedColor();
-        }
-        break;
+    const cell = this.grid[col][row];
+    const isActive = cell.color[color as keyof Colors];
+
+    cell.color.yellow = false;
+    cell.color.green = false;
+    cell.color.red = false;
+
+    if (!isActive) {
+      switch (color) {
+        case 'yellow':
+          cell.toggleYellowColor();
+          break;
+        case 'green':
+          cell.toggleGreenColor();
+          break;
+        case 'red':
+          cell.toggleRedColor();
+          break;
+      }
     }
   }
 
