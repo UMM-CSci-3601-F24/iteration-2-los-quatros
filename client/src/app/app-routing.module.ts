@@ -7,6 +7,8 @@ import { WordListComponent } from './anagram/word-list.component';
 
 
 import { AddWordComponent } from './anagram/add-word.component';
+import { GridCellComponent } from './grid-cell/grid-cell.component';
+import { GridComponent } from './grid/grid.component';
 
 // Note that the 'users/new' route needs to come before 'users/:id'.
 // If 'users/:id' came first, it would accidentally catch requests to
@@ -20,6 +22,8 @@ const routes: Routes = [
   {path: 'anagram/:wordGroup', component: WordListComponent, title: 'Anagram'},
 
 
+  {path: 'cell', component: GridCellComponent, title: 'cell'},
+  {path: 'grid', component: GridComponent, title: 'grid'}
 ];
 
 @NgModule({
