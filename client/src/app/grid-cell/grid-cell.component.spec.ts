@@ -1,6 +1,49 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { FormsModule } from '@angular/forms';
 import { GridCellComponent } from './grid-cell.component';
+import { GridCell } from './grid-cell';
+
+describe('GridCell', () => {
+  let gridCell: GridCell;
+
+  beforeEach(() => {
+    gridCell = new GridCell();
+  });
+
+  it('should initialize with default colors', () => {
+    expect(gridCell.color).toEqual({ yellow: false, green: false, red: false });
+  });
+
+  it('should toggle yellow color', () => {
+    expect(gridCell.color.yellow).toBeFalse();
+
+    gridCell.toggleYellowColor();
+    expect(gridCell.color.yellow).toBeTrue();
+
+    gridCell.toggleYellowColor();
+    expect(gridCell.color.yellow).toBeFalse();
+  });
+
+  it('should toggle green color', () => {
+    expect(gridCell.color.green).toBeFalse();
+
+    gridCell.toggleGreenColor();
+    expect(gridCell.color.green).toBeTrue();
+
+    gridCell.toggleGreenColor();
+    expect(gridCell.color.green).toBeFalse();
+  });
+
+  it('should toggle red color', () => {
+    expect(gridCell.color.red).toBeFalse();
+
+    gridCell.toggleRedColor();
+    expect(gridCell.color.red).toBeTrue();
+
+    gridCell.toggleRedColor();
+    expect(gridCell.color.red).toBeFalse();
+  });
+});
 
 
 describe('GridCellComponent', () => {
