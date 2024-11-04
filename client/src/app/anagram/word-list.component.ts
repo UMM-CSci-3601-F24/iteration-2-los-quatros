@@ -8,8 +8,8 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { WordService } from './word.service';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { toObservable, toSignal } from '@angular/core/rxjs-interop';
-import { catchError, combineLatest, of, switchMap, tap } from 'rxjs';
-import { Word } from './word';
+import {  combineLatest, switchMap, tap } from 'rxjs';
+// import { Word } from './word';
 import { MatIconModule } from '@angular/material/icon';
 import { RouterLink } from '@angular/router';
 import { MatButtonModule } from '@angular/material/button';
@@ -78,19 +78,19 @@ export class WordListComponent {
             wordGroup,
           })
         ),
-        catchError((err) => {
-          if (err.error instanceof ErrorEvent) {
-            this.errMsg.set(
-              `Problem in the client – Error: ${err.error.message}`
-            );
-          } else {
-            this.errMsg.set(
-              `Problem contacting the server – Error Code: ${err.status}\nMessage: ${err.message}`
-            );
-          }
-          this.snackBar.open(this.errMsg(), 'OK', { duration: 6000 });
-          return of<Word[]>([]);
-        }),
+        // catchError((err) => {
+        //   if (err.error instanceof ErrorEvent) {
+        //     this.errMsg.set(
+        //       `Problem in the client – Error: ${err.error.message}`
+        //     );
+        //   } else {
+        //     this.errMsg.set(
+        //       `Problem contacting the server – Error Code: ${err.status}\nMessage: ${err.message}`
+        //     );
+        //   }
+        //   this.snackBar.open(this.errMsg(), 'OK', { duration: 6000 });
+        //   return of<Word[]>([]);
+        // }),
         tap(() => {
 
 
@@ -119,15 +119,15 @@ export class WordListComponent {
   }
 
 
-  deleteWordGroup(group: string) {
-    this.wordService.deleteWordGroup(group).subscribe(() => {
-      this.snackBar.open(`We deleted a word group!`, 'OK', {duration: 6000});
-    })
-    // if(group.length >= 1) {
+  // deleteWordGroup(group: string) {
+  //   this.wordService.deleteWordGroup(group).subscribe(() => {
+  //     this.snackBar.open(`We deleted a word group!`, 'OK', {duration: 6000});
+  //   })
+  //   // if(group.length >= 1) {
 
 
-    // } else {
-    //   this.snackBar.open('Failed to delete word group', 'OK', {duration: 6000});
-    // }
-  }
+  //   // } else {
+  //   //   this.snackBar.open('Failed to delete word group', 'OK', {duration: 6000});
+  //   // }
+  // }
 }

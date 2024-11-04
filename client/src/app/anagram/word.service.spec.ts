@@ -170,23 +170,23 @@ describe('WordService', () => {
   })
 
 
-  // describe('Deleting a word using deleteWord()', () => {
-  //   it('Talks to correct endpoint with correct call', waitForAsync(() => {
-  //     const targetWord: Word = testWords[1];
-  //     const targetId: string = targetWord._id;
+  describe('Deleting a word using deleteWord()', () => {
+    it('Talks to correct endpoint with correct call', waitForAsync(() => {
+      const targetWord: Word = testWords[1];
+      const targetId: string = targetWord._id;
 
-  //     const mockedMethod = spyOn(httpClient, 'delete')
-  //       .and
-  //       .returnValue(of(targetWord));
+      const mockedMethod = spyOn(httpClient, 'delete')
+        .and
+        .returnValue(of(targetWord));
 
-  //     wordService.deleteWord(targetId).subscribe(() => {
-  //       expect(mockedMethod)
-  //         .withContext('one call')
-  //         .toHaveBeenCalledTimes(1);
-  //       expect(mockedMethod)
-  //         .withContext('talks to the correct endpoint')
-  //         .toHaveBeenCalledWith(`${wordService.wordUrl}/${targetId}`);
-  //     });
-  //   }))
-  // })
+      wordService.deleteWord(targetId).subscribe(() => {
+        expect(mockedMethod)
+          .withContext('one call')
+          .toHaveBeenCalledTimes(1);
+        expect(mockedMethod)
+          .withContext('talks to the correct endpoint')
+          .toHaveBeenCalledWith(`${wordService.wordUrl}/${targetId}`);
+      });
+    }))
+  })
 });
