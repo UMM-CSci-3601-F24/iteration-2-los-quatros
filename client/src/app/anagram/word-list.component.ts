@@ -8,7 +8,7 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { WordService } from './word.service';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { toObservable, toSignal } from '@angular/core/rxjs-interop';
-import {  combineLatest, switchMap, tap } from 'rxjs';
+import {  combineLatest, switchMap, tap } from 'rxjs'; //catchError, of
 // import { Word } from './word';
 import { MatIconModule } from '@angular/material/icon';
 import { RouterLink } from '@angular/router';
