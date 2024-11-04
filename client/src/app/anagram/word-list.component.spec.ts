@@ -108,17 +108,19 @@ describe('misbehaving word list', () => {
       .withContext('the error message will be')
       .toContain('Problem contacting the server – Error Code:');
   });
+
 });
 
 // describe('delete Word', () => {
 //   let wordList: WordListComponent;
 //   let fixture: ComponentFixture<WordListComponent>;
-
+//   let mockWordService: MockWordService;
 
 //   beforeEach(() => {
+//     mockWordService = new MockWordService();
 //     TestBed.configureTestingModule({
 //       imports: [COMMON_IMPORTS, WordListComponent],
-//       providers: [{provide: WordService, useValue: new MockWordService() }],
+//       providers: [{ provide: WordService, useValue: mockWordService }],
 //     });
 //   });
 
@@ -130,5 +132,13 @@ describe('misbehaving word list', () => {
 //     });
 //   }));
 
-
-// })
+//   it('calls deleteWord and removes the word from the list', waitForAsync(() => {
+//     const wordToDelete = "Mac_id";
+//     const deleteSpy = spyOn(mockWordService, 'deleteWord').and.callThrough();
+//     expect(wordList.serverFilteredWords().some((word: Word) => word._id === wordToDelete)).toBeTrue();
+//     wordList.deleteWord(wordToDelete);
+//     fixture.detectChanges();
+//     expect(deleteSpy).toHaveBeenCalledOnceWith(wordToDelete);
+//     expect(wordList.serverFilteredWords().some((word: Word) => word._id === wordToDelete)).toBeFalse();
+//   }));
+// });
