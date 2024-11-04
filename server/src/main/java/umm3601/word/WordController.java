@@ -103,11 +103,6 @@ public class WordController implements Controller {
 
       }
 
-            String word = ctx.queryParam(WORD_KEY);
-            for (char c : word.toCharArray()) {
-                filters.add(regex("word", Pattern.compile(Pattern.quote(String.valueOf(c)), Pattern.CASE_INSENSITIVE)));
-            }
-
         }
         if (ctx.queryParamMap().containsKey(WORD_GROUP_KEY)) {
             Pattern pattern = Pattern.compile(Pattern.quote(ctx.queryParam(WORD_GROUP_KEY)), Pattern.CASE_INSENSITIVE);

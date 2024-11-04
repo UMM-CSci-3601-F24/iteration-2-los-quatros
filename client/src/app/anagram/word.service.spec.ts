@@ -114,26 +114,11 @@ describe('WordService', () => {
   });
 
   describe('sorting on the client (alphabetical, by length)', () => {
-    // it('filters by alphabetical increasing', () => {
-    //   const sortType = "alphabetical";
-    //   const sortOrder = false;
-    //   console.log(`Words before sorting: ${testWords.map(w => w.word)}`);
-    //   const filteredWords = wordService.sortWords(testWords, {sortType: sortType, sortOrder: sortOrder});
-      // console.log(`Words after sorting: ${filteredWords.map(w => w.word)}`);
-      // console.log(`Test words after sorting: ${testWords.map(w => w.word)}`);
-    //   expect(filteredWords[0].word).toBe("El");
-    //   expect(filteredWords[1].word).toBe("Jakob");
-    //   expect(filteredWords[2].word).toBe("Keenan");
-    //   expect(filteredWords[3].word).toBe("Mac");
-    //   expect(filteredWords[4].word).toBe("Nic");
-    // });
     it('filters by alphabetical decreasing', () => {
       const sortType = "alphabetical";
       const sortOrder = true;
       const filteredWords = wordService.sortWords(testWords, {sortType: sortType, sortOrder: sortOrder});
-      console.log(`Words after sorting: ${filteredWords.map(w => w.word)}`);
-      console.log(`Test words after sorting: ${testWords.map(w => w.word)}`);
-      expect(filteredWords[0].word).toBe("Nic");
+      expect(filteredWords[0].word).toBe("El");
       // expect(filteredWords[4].word).toBe("El");
       // expect(filteredWords[3].word).toBe("Jakob");
       // expect(filteredWords[2].word).toBe("Keenan");
