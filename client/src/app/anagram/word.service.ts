@@ -55,8 +55,8 @@ export class WordService {
     return this.httpClient.delete<void>(`${this.wordUrl}/${id}`);
   }
 
-  deleteWordGroup(wordGroup: string): Observable<void> {
-    console.log(`delete word group was called with param : ${wordGroup}`)
-    return this.httpClient.delete<void>(`${this.wordUrl}/${wordGroup}`);
-  }
+  // deleteWordGroup(wordGroup: string): Observable<void> {
+  //   console.log(`delete word group was called with param : ${wordGroup}`)
+  //   return this.httpClient.delete<void>(`${this.wordUrl}/${wordGroup}`);
+  // }
 }
