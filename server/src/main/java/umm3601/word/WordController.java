@@ -95,20 +95,24 @@ public class WordController implements Controller {
 
     private Bson constructFilter(Context ctx) {
         List<Bson> filters = new ArrayList<>();
-
         if (ctx.queryParamMap().containsKey(WORD_KEY)) {
+
           String word = ctx.queryParam(WORD_KEY);
           for (char c : word.toCharArray()) {
               filters.add(regex("word", Pattern.compile(Pattern.quote(String.valueOf(c)), Pattern.CASE_INSENSITIVE)));
 
       }
-        }
 
+            String word = ctx.queryParam(WORD_KEY);
+            for (char c : word.toCharArray()) {
+                filters.add(regex("word", Pattern.compile(Pattern.quote(String.valueOf(c)), Pattern.CASE_INSENSITIVE)));
+            }
+
+        }
         if (ctx.queryParamMap().containsKey(WORD_GROUP_KEY)) {
-          Pattern pattern = Pattern.compile(Pattern.quote(ctx.queryParam(WORD_GROUP_KEY)), Pattern.CASE_INSENSITIVE);
-          filters.add(regex(WORD_GROUP_KEY, pattern));
+            Pattern pattern = Pattern.compile(Pattern.quote(ctx.queryParam(WORD_GROUP_KEY)), Pattern.CASE_INSENSITIVE);
+            filters.add(regex(WORD_GROUP_KEY, pattern));
         }
-
         Bson combinedFilter = filters.isEmpty() ? new Document() : and(filters);
         return combinedFilter;
     }
